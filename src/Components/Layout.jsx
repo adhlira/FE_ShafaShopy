@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Outlet } from "react-router-dom";
-import "./Components/Sidebar";
-import Sidebar from "./Components/Sidebar";
+import Sidebar from "./Sidebar";
 
 export default function Layout() {
   return (

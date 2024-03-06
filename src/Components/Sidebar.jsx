@@ -11,7 +11,7 @@ export default function Sidebar() {
         <span className="text-neutral-100 text-lg">ShafaShopy</span>
       </div>
       <div className="flex-1"></div>
-      <div>bottom part</div>
+      <div>Bottom Part</div>
     </div>
   );
 }
