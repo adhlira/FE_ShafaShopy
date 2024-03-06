@@ -1,8 +1,10 @@
 import "./index.css";
+import "./Layout";
+import Layout from "./Layout";
 function App() {
   return (
     <>
-      <h1 className="text-8xl font-semibold italic">Tes</h1>
+      <Layout />
     </>
   );
 }
