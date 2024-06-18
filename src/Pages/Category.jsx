@@ -22,8 +22,8 @@ const Category = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Categories</h1>
-        <Link>
-          <button className="border rounded-lg p-2 bg-green-800 text-white">Add Data</button>
+        <Link to={"/categories/add"}>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
         </Link>
       </div>
       <table className="table border w-full mt-5">
@@ -41,10 +41,10 @@ const Category = () => {
               <td className="border">{item.name}</td>
               <td className="border">
                 <Link>
-                  <button className="border p-2 rounded-lg bg-yellow-500 text-white">Edit</button>
+                  <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
                 </Link>
                 <Link>
-                  <button className="border p-2 ml-2 rounded-lg bg-red-800 text-white">Hapus</button>
+                  <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white">Hapus</button>
                 </Link>
               </td>
             </tr>
