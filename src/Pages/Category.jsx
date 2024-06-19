@@ -40,7 +40,7 @@ const Category = () => {
               <td className="border">{index + 1}</td>
               <td className="border">{item.name}</td>
               <td className="border">
-                <Link>
+                <Link to={`/categories/edit/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
                 </Link>
                 <Link>

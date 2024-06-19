@@ -1,19 +1,21 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Dashboard from '../Pages/Dashboard.jsx';
-import Category from '../Pages/Category.jsx';
-import AddCategory from '../Pages/AddCategory.jsx';
-import App from '../App.jsx';
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Dashboard from "../Pages/Dashboard.jsx";
+import Category from "../Pages/Category.jsx";
+import AddCategory from "../Pages/AddCategory.jsx";
+import EditCategory from "../Pages/EditCategory.jsx";
+import App from "../App.jsx";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
-      { path: '/', element: <Dashboard /> },
-      { path: '/categories', element: <Category /> },
-      { path: '/categories/add', element: <AddCategory /> },
+      { path: "/", element: <Dashboard /> },
+      { path: "/categories", element: <Category /> },
+      { path: "/categories/add", element: <AddCategory /> },
+      { path: "/categories/edit/:id", element: <EditCategory /> },
     ],
   },
 ]);
