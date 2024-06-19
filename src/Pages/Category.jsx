@@ -18,6 +18,20 @@ const Category = () => {
     fetchData();
   }, []);
 
+  const deleteData = async (id) => {
+    const check = confirm("Anda yakin ingin menghapus data ini ? ");
+    if (check == true) {
+      try {
+        await axios.delete(`http://localhost:4000/categories/${id}`);
+        setCategory(category.filter((item) => item.id !== id));
+        alert("Data berhasil dihapus");
+        window.location.reload();
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex justify-between">
@@ -44,7 +58,9 @@ const Category = () => {
                   <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
                 </Link>
                 <Link>
-                  <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white">Hapus</button>
+                  <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white" onClick={() => deleteData(item.id)}>
+                    Hapus
+                  </button>
                 </Link>
               </td>
             </tr>
