@@ -6,6 +6,7 @@ import Sidebar from './Components/Sidebar.jsx';
 const links = [
   { name: 'Dashboard', path: '/' },
   { name: 'Categories', path: '/categories' },
+  { name: 'Colors', path: '/colors' },
 ];
 
 function App() {
