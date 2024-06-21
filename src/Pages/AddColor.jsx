@@ -2,10 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
-const AddCategory = () => {
+const AddColor = () => {
   const [data, setData] = useState({ name: "" });
 
-  const url = "http://localhost:4000/categories";
+  const url = "http://localhost:4000/colors";
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,7 +22,7 @@ const AddCategory = () => {
       const response = await axios.post(url, userData);
       console.log(response);
       alert("Data Berhasil ditambahkan !");
-      navigate("/categories");
+      navigate("/colors");
     } catch (error) {
       console.log(error);
     }
@@ -31,15 +31,15 @@ const AddCategory = () => {
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="text-2xl">Add Categories</h1>
-        <Link to={"/categories"}>
+        <h1 className="text-2xl">Add Colors</h1>
+        <Link to={"/colors"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
         </Link>
       </div>
       <form className="w-full max-w-lg mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit} action="">
         <div className="mb-4 mt-5">
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
-            Category Name
+            Color Name
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -58,4 +58,4 @@ const AddCategory = () => {
     </>
   );
 };
-export default AddCategory;
+export default AddColor;

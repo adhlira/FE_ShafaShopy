@@ -36,7 +36,7 @@ const Colors = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Colors</h1>
-        <Link to={"/categories/add"}>
+        <Link to={"/colors/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
         </Link>
       </div>

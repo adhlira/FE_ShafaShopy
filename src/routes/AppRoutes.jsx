@@ -6,6 +6,7 @@ import Category from "../Pages/Category.jsx";
 import AddCategory from "../Pages/AddCategory.jsx";
 import EditCategory from "../Pages/EditCategory.jsx";
 import Colors from "../Pages/Colors.jsx";
+import AddColor from "../Pages/AddColor.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: "/categories/add", element: <AddCategory /> },
       { path: "/categories/edit/:id", element: <EditCategory /> },
       { path: "/colors", element: <Colors /> },
+      { path: "/colors/add", element: <AddColor /> },
     ],
   },
 ]);
