@@ -48,7 +48,7 @@ const AddColor = () => {
             name="name"
             value={data.name}
             onChange={handleChange}
-            placeholder="Input name"
+            placeholder="Input color name"
           />
         </div>
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">

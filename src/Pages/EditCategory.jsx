@@ -44,7 +44,7 @@ const EditCategory = () => {
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="text-2xl">Add Categories</h1>
+        <h1 className="text-2xl">Edit Categories</h1>
         <Link to={"/categories"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
         </Link>
@@ -61,7 +61,7 @@ const EditCategory = () => {
             name="name"
             value={category?.name}
             onChange={handleChange}
-            placeholder="Masukkan name"
+            placeholder="Input Category Name"
           />
         </div>
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
