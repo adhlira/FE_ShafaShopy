@@ -7,6 +7,7 @@ const links = [
   { name: 'Dashboard', path: '/' },
   { name: 'Categories', path: '/categories' },
   { name: 'Colors', path: '/colors' },
+  { name: 'Products', path: '/products' },
 ];
 
 function App() {
