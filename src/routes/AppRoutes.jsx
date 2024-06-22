@@ -11,6 +11,7 @@ import EditColor from "../Pages/EditColor.jsx";
 import Products from "../Pages/Products.jsx";
 import DetailProduct from "../Pages/DetailProduct.jsx";
 import DetailSellingPrice from "../Pages/DetailSellingPrice.jsx";
+import AddProduct from "../Pages/AddProduct.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
       { path: "/colors/add", element: <AddColor /> },
       { path: "/colors/edit/:id", element: <EditColor /> },
       { path: "/products", element: <Products /> },
-      { path: "/product/:id", element: <DetailProduct /> },
+      { path: "/products/add", element: <AddProduct /> },
+      { path: "/products/:id", element: <DetailProduct /> },
       { path: "/sellingPrice/product/:id", element: <DetailSellingPrice /> },
     ],
   },
