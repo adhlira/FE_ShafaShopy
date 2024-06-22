@@ -45,7 +45,7 @@ const Products = () => {
           <tr>
             <th className="border">No</th>
             <th className="border">Name</th>
-            <th className="border">Purchase Price</th>
+            <th className="border">Color</th>
             <th className="border">Stock</th>
             <th className="border">Action</th>
           </tr>
@@ -55,10 +55,10 @@ const Products = () => {
             <tr key={index} className="text-center">
               <td className="border">{index + 1}</td>
               <td className="border">{item.name}</td>
-              <td className="border">{item.purchase_price}</td>
+              <td className="border">{item.Color?.name}</td>
               <td className="border">{item.stock}</td>
               <td className="border">
-              <Link to={`/products/${item.id}`}>
+              <Link to={`/product/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white">Detail</button>
                 </Link>
                 <Link to={`/products/edit/${item.id}`}>
