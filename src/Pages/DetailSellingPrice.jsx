@@ -24,7 +24,7 @@ const DetailSellingPrice = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Detail Selling Price Product</h1>
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/products/${product.id}`}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
         </Link>
       </div>
