@@ -8,6 +8,7 @@ const links = [
   { name: 'Categories', path: '/categories' },
   { name: 'Colors', path: '/colors' },
   { name: 'Products', path: '/products' },
+  { name: 'Selling Prices', path: '/sellingprices' },
 ];
 
 function App() {
