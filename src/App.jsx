@@ -9,6 +9,7 @@ const links = [
   { name: 'Colors', path: '/colors' },
   { name: 'Products', path: '/products' },
   { name: 'Selling Prices', path: '/sellingprices' },
+  { name: 'Customers', path: '/customers' },
 ];
 
 function App() {
