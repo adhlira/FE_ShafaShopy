@@ -17,6 +17,7 @@ import SellingPrice from "../Pages/SellingPrice.jsx"
 import AddSellingPrice from "../Pages/AddSellingPrice.jsx";
 import EditSellingPrice from "../Pages/EditSellingPrice.jsx"
 import Customer from "../Pages/Customers.jsx";
+import AddCustomer from "../Pages/AddCustomer.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       { path: "/sellingprice/add", element: <AddSellingPrice /> },
       { path: "/sellingprice/edit/:id", element: <EditSellingPrice /> },
       { path: "/customers", element: <Customer /> },
+      { path: "/customers/add", element: <AddCustomer /> },
     ],
   },
 ]);
