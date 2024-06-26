@@ -5,9 +5,21 @@ import axios from "axios";
 const AddCustomer = () => {
   const [data, setData] = useState({ name: "", address: "", telp: "", level_id: "", status: "" });
   const [level, setLevel] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(0)
+  const [statuscustomer, setStatusCustomer] = useState("")
 
   const url = "http://localhost:4000/customers";
   const navigate = useNavigate();
+
+  const handleSelectChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+    setSelectedOption(value);
+    if (value === 1) {
+      setStatusCustomer('Non Reseller');
+    } else {
+      setStatusCustomer('Reseller');
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +45,8 @@ const AddCustomer = () => {
       name: data.name,
       address: data.address,
       telp: data.telp,
-      level_id: +data.level_id,
-      status: data.status,
+      level_id: selectedOption,
+      status: statuscustomer,
     };
     try {
       const response = await axios.post(url, userData);
@@ -91,9 +103,9 @@ const AddCustomer = () => {
         </div>
         <div className="mb-4 mt-5">
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="level_id">
-            Level Customer
+            Customer Level
           </label>
-          <select className="form-select px-10 py-2 border w-full rounded-lg" name="level_id" value={data.level} onChange={handleChange}>
+          <select className="form-select px-10 py-2 border w-full rounded-lg" name="level_id" value={selectedOption} onChange={handleSelectChange}>
             <option className="text-center md:text-base text-xs" value="">
               Choose
             </option>
@@ -106,6 +118,20 @@ const AddCustomer = () => {
         </div>
         <div className="mb-4 mt-5">
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="status">
+            Customer Status
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="status"
+            type="text"
+            name="status"
+            value={statuscustomer}
+            readOnly
+            placeholder="Input customer status"
+          />
+        </div>
+        {/* <div className="mb-4 mt-5">
+          <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="status">
             Status Customer
           </label>
           <input className="form-radio" id="status" type="radio" name="status" value="Reseller" checked={data.status === "Reseller"} onChange={handleChange} />
@@ -116,7 +142,7 @@ const AddCustomer = () => {
           <label htmlFor="perempuan" className="font-semibold md:font-medium ml-3">
             Non Reseller
           </label>
-        </div>
+        </div> */}
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
           Simpan
         </button>
