@@ -1,25 +1,40 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const AddCustomer = () => {
-  const [data, setData] = useState({ name: "", address: "", telp: "", level_id: "", status: "" });
+const EditCustomer = () => {
+  const [customer, setCustomer] = useState({});
   const [level, setLevel] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(0)
-  const [statuscustomer, setStatusCustomer] = useState("")
+  const [selectedOption, setSelectedOption] = useState(0);
+  const [statuscustomer, setStatusCustomer] = useState("");
 
-  const url = "http://localhost:4000/customers";
+  const { id } = useParams();
+
+  const url = `http://localhost:4000/customers/${id}`;
   const navigate = useNavigate();
 
   const handleSelectChange = (event) => {
     const value = parseInt(event.target.value, 10);
     setSelectedOption(value);
     if (value === 1) {
-      setStatusCustomer('Non Reseller');
+      setStatusCustomer("Non Reseller");
     } else {
-      setStatusCustomer('Reseller');
+      setStatusCustomer("Reseller");
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        setCustomer(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, {});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,22 +51,22 @@ const AddCustomer = () => {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setData({ ...data, [e.target.name]: value });
+    setCustomer({ ...customer, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
-      name: data.name,
-      address: data.address,
-      telp: data.telp,
+      name: customer.name,
+      address: customer.address,
+      telp: customer.telp,
       level_id: selectedOption,
       status: statuscustomer,
     };
     try {
-      const response = await axios.post(url, userData);
+      const response = await axios.put(url, userData);
       console.log(response);
-      alert("Data Berhasil ditambahkan !");
+      alert("Data Berhasil diubah !");
       navigate("/customers");
     } catch (error) {
       console.log(error);
@@ -61,7 +76,7 @@ const AddCustomer = () => {
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="text-2xl">Add Customer</h1>
+        <h1 className="text-2xl">Edit Customer</h1>
         <Link to={"/customers"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
         </Link>
@@ -76,7 +91,7 @@ const AddCustomer = () => {
             id="name"
             type="text"
             name="name"
-            value={data.name}
+            value={customer.name}
             onChange={handleChange}
             placeholder="Input customer name"
           />
@@ -85,7 +100,7 @@ const AddCustomer = () => {
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="address">
             Address
           </label>
-          <textarea name="address" value={data.address} onChange={handleChange} placeholder="Input address" className="shadow border rounded w-full py-10 px-3 text-gray-700 focus:outline-none focus:shadow-outline"></textarea>
+          <textarea name="address" value={customer.address} onChange={handleChange} placeholder="Input address" className="shadow border rounded w-full py-10 px-3 text-gray-700 focus:outline-none focus:shadow-outline"></textarea>
         </div>
         <div className="mb-4 mt-5">
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="telp">
@@ -96,7 +111,7 @@ const AddCustomer = () => {
             id="telp"
             type="text"
             name="telp"
-            value={data.telp}
+            value={customer.telp}
             onChange={handleChange}
             placeholder="Input customer telp"
           />
@@ -137,4 +152,4 @@ const AddCustomer = () => {
     </>
   );
 };
-export default AddCustomer;
+export default EditCustomer;
