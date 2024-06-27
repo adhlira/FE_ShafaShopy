@@ -3,10 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const EditCustomer = () => {
-  const [customer, setCustomer] = useState({});
+  const [customer, setCustomer] = useState({ name: "", address: "", telp: "", level_id: "", status: "" });
   const [level, setLevel] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(0);
-  const [statuscustomer, setStatusCustomer] = useState("");
 
   const { id } = useParams();
 
@@ -14,20 +12,22 @@ const EditCustomer = () => {
   const navigate = useNavigate();
 
   const handleSelectChange = (event) => {
-    const value = parseInt(event.target.value, 10);
-    setSelectedOption(value);
-    if (value === 1) {
-      setStatusCustomer("Non Reseller");
-    } else {
-      setStatusCustomer("Reseller");
-    }
+    const newLevel = parseInt(event.target.value, 10);
+    const newStatus = newLevel === 1 ? "Non Reseller" : "Reseller";
+
+    setCustomer((prevCustomer) => ({
+      ...prevCustomer,
+      status: newStatus,
+      level_id: newLevel,
+    }));
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(url);
-        setCustomer(response.data);
+        const customerData = response.data;
+        setCustomer({ name: customerData.name, address: customerData.address, telp: customerData.telp, status: customerData.level_id === 1 ? "Non Reseller" : "Reseller", level_id: customerData.level_id });
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
@@ -60,8 +60,8 @@ const EditCustomer = () => {
       name: customer.name,
       address: customer.address,
       telp: customer.telp,
-      level_id: selectedOption,
-      status: statuscustomer,
+      level_id: customer.level_id,
+      status: customer.status,
     };
     try {
       const response = await axios.put(url, userData);
@@ -120,7 +120,7 @@ const EditCustomer = () => {
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="level_id">
             Customer Level
           </label>
-          <select className="form-select px-10 py-2 border w-full rounded-lg" name="level_id" value={selectedOption} onChange={handleSelectChange}>
+          <select className="form-select px-10 py-2 border w-full rounded-lg" name="level_id" value={customer.level_id} onChange={handleSelectChange}>
             <option className="text-center md:text-base text-xs" value="">
               Choose
             </option>
@@ -140,7 +140,7 @@ const EditCustomer = () => {
             id="status"
             type="text"
             name="status"
-            value={statuscustomer}
+            value={customer.status}
             readOnly
             placeholder="Input customer status"
           />
