@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Sidebar from './Components/Sidebar.jsx';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Sidebar from "./Components/Sidebar.jsx";
 
 const links = [
-  { name: 'Dashboard', path: '/' },
-  { name: 'Categories', path: '/categories' },
-  { name: 'Colors', path: '/colors' },
-  { name: 'Products', path: '/products' },
-  { name: 'Selling Prices', path: '/sellingprices' },
-  { name: 'Customers', path: '/customers' },
+  { name: "Dashboard", path: "/" },
+  { name: "Categories", path: "/categories" },
+  { name: "Colors", path: "/colors" },
+  { name: "Products", path: "/products" },
+  { name: "Selling Prices", path: "/sellingprices" },
+  { name: "Customers", path: "/customers" },
+  { name: "Transactions", path: "/transactions" },
 ];
 
 function App() {
