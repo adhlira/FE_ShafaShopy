@@ -55,7 +55,7 @@ const AddProduct = () => {
       const response = await axios.post(url, userData);
       console.log(response);
       alert("Data Berhasil ditambahkan !");
-      navigate("/products");
+      navigate("/sellingprice/add");
     } catch (error) {
       console.log(error);
     }

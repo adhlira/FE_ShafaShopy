@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Transaction = () => {
-  const [customer, setCustomer] = useState([]);
+  const [transaction, setTransaction] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/customers");
-        setCustomer(response.data);
+        const response = await axios.get("http://localhost:4000/transactions");
+        setTransaction(response.data);
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
@@ -18,11 +18,17 @@ const Transaction = () => {
     fetchData();
   }, []);
 
+   // Fungsi untuk memformat tanggal
+   const formatDate = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleDateString(); // Format tanggal saja
+  };
+
   const deleteData = async (id) => {
     const check = confirm("Anda yakin ingin menghapus data ini ? ");
     if (check == true) {
       try {
-        await axios.delete(`http://localhost:4000/customers/${id}`);
+        await axios.delete(`http://localhost:4000/transactions/${id}`);
         setCustomer(customer.filter((item) => item.id !== id));
         alert("Data berhasil dihapus");
         window.location.reload();
@@ -36,7 +42,7 @@ const Transaction = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Transactions</h1>
-        <Link to={"/customers/add"}>
+        <Link to={"/transactions/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
         </Link>
       </div>
@@ -44,26 +50,27 @@ const Transaction = () => {
         <thead>
           <tr>
             <th className="border">No</th>
-            <th className="border">Name</th>
-            <th className="border">Address</th>
-            <th className="border">Telp</th>
-            <th className="border">Status</th>
-            <th className="border">Level</th>
+            <th className="border">Product Name</th>
+            <th className="border">Date</th>
+            <th className="border">Purchase Amount</th>
+            <th className="border">Total</th>
             <th className="border">Action</th>
           </tr>
         </thead>
         <tbody>
-          {customer.map((item, index) => (
+          {transaction.map((item, index) => (
             <tr key={index} className="text-center">
               <td className="border">{index + 1}</td>
-              <td className="border">{item.name}</td>
-              <td className="border">{item.address}</td>
-              <td className="border">{item.telp}</td>
-              <td className="border">{item.status}</td>
-              <td className="border">{item.Level?.level}</td>
+              <td className="border">{item.Product?.name}</td>
+              <td className="border">{formatDate(item.tanggal)}</td>
+              <td className="border">{item.Detail_Transaction?.[0]?.jumlah_beli}</td>
+              <td className="border">Rp. {item.total}</td>
               <td className="border">
-                <Link to={`/customers/edit/${item.id}`}>
-                  <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
+              <Link to={`/transactions/detail/${item.id}`}>
+                  <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white">Detail</button>
+                </Link>
+                <Link to={`/transactions/edit/${item.id}`}>
+                  <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
                 </Link>
                 <Link>
                   <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white" onClick={() => deleteData(item.id)}>
