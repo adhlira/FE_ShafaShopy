@@ -29,7 +29,7 @@ const Transaction = () => {
     if (check == true) {
       try {
         await axios.delete(`http://localhost:4000/transactions/${id}`);
-        setCustomer(customer.filter((item) => item.id !== id));
+        setTransaction(transaction.filter((item) => item.id !== id));
         alert("Data berhasil dihapus");
         window.location.reload();
       } catch (error) {

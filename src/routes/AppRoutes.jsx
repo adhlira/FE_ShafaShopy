@@ -20,6 +20,7 @@ import Customer from "../Pages/Customers.jsx";
 import AddCustomer from "../Pages/AddCustomer.jsx";
 import EditCustomer from "../Pages/EditCustomer.jsx";
 import Transaction from "../Pages/Transactions.jsx";
+import AddTransaction from "../Pages/AddTransaction.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
       { path: "/customers/add", element: <AddCustomer /> },
       { path: "/customers/edit/:id", element: <EditCustomer /> },
       { path: "/transactions", element: <Transaction /> },
+      { path: "/transactions/add", element: <AddTransaction /> },
     ],
   },
 ]);
