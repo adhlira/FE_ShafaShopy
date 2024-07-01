@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const AddTransaction = () => {
-  const [data, setData] = useState({ product_id: "", customer_id: "", tanggal: "", total: "", jumlah_beli: "", price: "" });
+  const [data, setData] = useState({ product_id: "", customer_id: "", tanggal: "", total: "", jumlah_beli: "", price_per_piece: "" });
   const [product, setProduct] = useState([]);
   const [customer, setCustomer] = useState([]);
   const [isReseller, setIsReseller] = useState(false);
@@ -19,7 +19,7 @@ const AddTransaction = () => {
   const handleRadioChange = (e) => {
     setIsReseller(e.target.value === "Reseller");
     if (e.target.value === "Non Reseller") {
-      setSelectValue("0");
+      setSelectValue(1);
       setLevelCust(0);
     }
   };
@@ -97,6 +97,7 @@ const AddTransaction = () => {
       tanggal: new Date(data.tanggal),
       total: +total,
       jumlah_beli: +data.jumlah_beli,
+      price_per_piece: +price,
       subtotal: +total,
     };
     try {
@@ -117,7 +118,7 @@ const AddTransaction = () => {
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
         </Link>
       </div>
-      <form className="w-full  mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit}>
+      <form className="w-full mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit}>
         <div className="flex justify-between">
           <div className="flex-1 flex-col">
             <div className="mb-8 mt-5">
@@ -167,7 +168,7 @@ const AddTransaction = () => {
                 </option>
                 {product.map((item) => (
                   <option className="md:text-base text-xs" key={item.id} value={item.id}>
-                    {item.name}
+                    {item.name} - {item.Color.name}
                   </option>
                 ))}
               </select>
@@ -178,7 +179,7 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Price
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price" type="number" name="price" value={price} readOnly />
+              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price_per_piece" type="number" name="price_per_piece" value={price} readOnly />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="amount">

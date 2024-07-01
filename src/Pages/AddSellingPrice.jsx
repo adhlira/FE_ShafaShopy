@@ -43,7 +43,7 @@ const AddSellingPrice = () => {
       const response = await axios.post(url, userData);
       console.log(response);
       alert("Data Berhasil ditambahkan !");
-      navigate("/sellingPrices");
+      navigate("/products");
     } catch (error) {
       console.log(error);
     }
