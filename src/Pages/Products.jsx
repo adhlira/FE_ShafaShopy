@@ -4,12 +4,15 @@ import axios from "axios";
 
 const Products = () => {
   const [product, setProduct] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/products");
         setProduct(response.data);
+        setFilteredData(response.data);
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
@@ -17,6 +20,16 @@ const Products = () => {
     };
     fetchData();
   }, []);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    if (event.target.value === "") {
+      setFilteredData(product);
+    } else {
+      const data = product.filter((item) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
+      setFilteredData(data);
+    }
+  };
 
   const deleteData = async (id) => {
     const check = confirm("Anda yakin ingin menghapus data ini ? ");
@@ -36,6 +49,15 @@ const Products = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Products</h1>
+        <input
+          className="shadow appearance-none border rounded w-1/2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="name"
+          type="text"
+          name="name"
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Search product by product name . . ."
+        />
         <Link to={"/products/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
         </Link>
@@ -51,14 +73,14 @@ const Products = () => {
           </tr>
         </thead>
         <tbody>
-          {product.map((item, index) => (
+          {filteredData.map((item, index) => (
             <tr key={index} className="text-center">
               <td className="border">{index + 1}</td>
               <td className="border">{item.name}</td>
               <td className="border">{item.Color?.name}</td>
               <td className="border">{item.stock}</td>
               <td className="border">
-              <Link to={`/products/${item.id}`}>
+                <Link to={`/products/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white">Detail</button>
                 </Link>
                 <Link to={`/products/edit/${item.id}`}>
