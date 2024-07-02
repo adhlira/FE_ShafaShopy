@@ -29,9 +29,9 @@ const DetailTransaction = () => {
       </div>
       <div className="flex justify-between mt-5">
         <div className="flex-1 flex-col">
-          <div className="grid grid-cols-3 gap-6 text-left">
-            <span className="font-semibold">Customer Name</span>
-            <span>:</span>
+          <div className="grid grid-cols-3  gap-6 text-left">
+            <span className="font-semibold ">Customer Name</span>
+            <span className="">:</span>
             <span className="">{detail.Customer?.name}</span>
 
             <span className="font-semibold">Customer Status</span>

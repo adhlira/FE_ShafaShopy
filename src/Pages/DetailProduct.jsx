@@ -25,37 +25,65 @@ const DetailProduct = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Detail Product</h1>
         <Link to={"/products"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
         </Link>
       </div>
-      <table className="table border w-full mt-5">
-        <thead>
-          <tr>
-            <th className="border">Name</th>
-            <th className="border">Category</th>
-            <th className="border">Color</th>
-            <th className="border">Purchase Price</th>
-            <th className="border">Stock</th>
-            <th className="border">Description</th>
-            <th className="border">Selling Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="border text-center">
-            <td className="border">{product.name}</td>
-            <td className="border">{product.Category?.name}</td>
-            <td className="border">{product.Color?.name}</td>
-            <td className="border">Rp. {product.purchase_price}</td>
-            <td className="border">{product.stock} pcs</td>
-            <td className="border">{product.description}</td>
-            <td>
-              <Link to={`../sellingPrice/product/${product.id}`}>
-                <button className="border rounded-lg p-2 bg-blue-600 hover:bg-blue-500 text-white">Lihat</button>
-              </Link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="flex justify-between mt-5">
+        <div className="flex-1 flex-col">
+          <div className="grid grid-cols-3 gap-6">
+            <span className="font-semibold">Product Category</span>
+            <span>:</span>
+            <span>{product.Category?.name}</span>
+
+            <span className="font-semibold">Product Name</span>
+            <span>:</span>
+            <span>{product.name}</span>
+
+            <span className="font-semibold">Color</span>
+            <span>:</span>
+            <span>{product.Color?.name}</span>
+
+            <span className="font-semibold">Stock</span>
+            <span>:</span>
+            <span>{product.stock} Pcs</span>
+
+            <span className="font-semibold">Description</span>
+            <span>:</span>
+            <span>{product.description}</span>
+
+            <span className="font-semibold">Purchase Price</span>
+            <span>:</span>
+            <span>Rp. {product.purchase_price}</span>
+          </div>
+        </div>
+        <div className="flex-1 flex-col ml-5">
+          <div className="grid grid-cols-3 gap-6 text-left">
+            <span className="font-semibold">Price Level 0</span>
+            <span>:</span>
+            <span>Rp. {product.SellingPrice?.[0]?.price0}</span>
+
+            <span className="font-semibold">Price Level 1</span>
+            <span>:</span>
+            <span>Rp. {product.SellingPrice?.[0]?.price1}</span>
+
+            <span className="font-semibold">Price Level 2</span>
+            <span>:</span>
+            <span>Rp. {product.SellingPrice?.[0]?.price2}</span>
+
+            <span className="font-semibold">Price Level 3</span>
+            <span>:</span>
+            <span>Rp. {product.SellingPrice?.[0]?.price3}</span>
+
+            <span className="font-semibold">Price Level 4</span>
+            <span>:</span>
+            <span>Rp. {product.SellingPrice?.[0]?.price4}</span>
+
+            <span className="font-semibold">Price Level 5</span>
+            <span>:</span>
+            <span>Rp. {product.SellingPrice?.[0]?.price5}</span>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

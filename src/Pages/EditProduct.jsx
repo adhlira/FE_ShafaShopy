@@ -77,7 +77,7 @@ const EditProduct = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Edit Product</h1>
         <Link to={"/products"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
         </Link>
       </div>
       <form className="w-full max-w-lg mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit} action="">
