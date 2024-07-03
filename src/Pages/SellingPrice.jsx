@@ -56,7 +56,7 @@ const Products = () => {
           name="name"
           value={searchTerm}
           onChange={handleSearch}
-          placeholder="Search product by product name . . ."
+          placeholder="Search by product name . . ."
         />
         <Link to={"/sellingprice/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>

@@ -4,12 +4,15 @@ import axios from "axios";
 
 const Customer = () => {
   const [customer, setCustomer] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/customers");
         setCustomer(response.data);
+        setFilteredData(response.data);
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
@@ -32,10 +35,29 @@ const Customer = () => {
     }
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    if (event.target.value === "") {
+      setFilteredData(customer);
+    } else {
+      const data = customer.filter((item) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
+      setFilteredData(data);
+    }
+  };
+
   return (
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Customers</h1>
+        <input
+          className="shadow appearance-none border rounded w-1/2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="name"
+          type="text"
+          name="name"
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Search by customer name . . ."
+        />
         <Link to={"/customers/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
         </Link>
@@ -53,7 +75,7 @@ const Customer = () => {
           </tr>
         </thead>
         <tbody>
-          {customer.map((item, index) => (
+          {filteredData.map((item, index) => (
             <tr key={index} className="text-center">
               <td className="border">{index + 1}</td>
               <td className="border">{item.name}</td>
