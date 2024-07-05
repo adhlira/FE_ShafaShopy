@@ -3,6 +3,8 @@ import axios from "axios";
 
 const MonthlyReport = () => {
   const [data, setData] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,9 +19,22 @@ const MonthlyReport = () => {
     fetchData();
   }, []);
 
-  const totalAmount = data.reduce((sum, item) => sum + item.total, 0)
-  console.log(totalAmount)
-  
+  const DatabyDate = () => {
+    console.log(data);
+    if (startDate || endDate) {
+      const filteredData = data.filter((item) => {
+        const itemDate = new Date(item.tanggal);
+        const start = startDate ? new Date(startDate) : new Date("1970-01-01");
+        const end = endDate ? new Date(endDate) : new Date("9999-12-31");
+        return itemDate >= start && itemDate <= end;
+      });
+      setData(filteredData);
+      console.log(filteredData)
+    }
+  };
+
+  const totalAmount = data.reduce((sum, item) => sum + item.total, 0);
+  console.log(totalAmount);
 
   const formatDate = (datetime) => {
     const date = new Date(datetime);
@@ -31,6 +46,36 @@ const MonthlyReport = () => {
       <div className="justify-between">
         <h1 className="text-2xl">Monthly Report</h1>
       </div>
+      <div className="justify-between">
+        <div className="flex justify-between mt-6">
+          <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
+            Start Date
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="total"
+            type="datetime-local"
+            name="tanggal"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
+            End Date
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="total"
+            type="datetime-local"
+            name="tanggal"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white" onClick={DatabyDate}>
+            Filter
+          </button>
+        </div>
+      </div>
+
       <table className="table border w-full mt-5">
         <thead>
           <tr>
