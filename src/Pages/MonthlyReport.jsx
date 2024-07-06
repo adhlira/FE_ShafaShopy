@@ -19,27 +19,27 @@ const MonthlyReport = () => {
     fetchData();
   }, []);
 
+  const formatDate = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleDateString(); // Format tanggal saja
+  };
+
   const DatabyDate = () => {
     console.log(data);
     if (startDate || endDate) {
       const filteredData = data.filter((item) => {
-        const itemDate = new Date(item.tanggal);
-        const start = startDate ? new Date(startDate) : new Date("1970-01-01");
-        const end = endDate ? new Date(endDate) : new Date("9999-12-31");
+        const itemDate = formatDate(item.tanggal);
+        const start = formatDate(startDate);
+        const end = formatDate(endDate);
         return itemDate >= start && itemDate <= end;
       });
       setData(filteredData);
-      console.log(filteredData)
+      console.log(filteredData);
     }
   };
 
   const totalAmount = data.reduce((sum, item) => sum + item.total, 0);
   console.log(totalAmount);
-
-  const formatDate = (datetime) => {
-    const date = new Date(datetime);
-    return date.toLocaleDateString(); // Format tanggal saja
-  };
 
   return (
     <>
@@ -56,8 +56,8 @@ const MonthlyReport = () => {
             id="total"
             type="datetime-local"
             name="tanggal"
-            value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
+            value={startDate}
           />
           <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
             End Date
@@ -67,8 +67,8 @@ const MonthlyReport = () => {
             id="total"
             type="datetime-local"
             name="tanggal"
-            value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
+            value={endDate}
           />
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white" onClick={DatabyDate}>
             Filter
