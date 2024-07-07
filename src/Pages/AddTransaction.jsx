@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Modal from "./ModalProduct.jsx";
 
 const AddTransaction = () => {
   const [data, setData] = useState({ product_id: "", customer_id: "", tanggal: "", total: "", jumlah_beli: "", price_per_piece: "" });
@@ -12,6 +13,7 @@ const AddTransaction = () => {
   const [selectedProduct, setSelectedProduct] = useState();
   const [price, setPrice] = useState();
   const [total, setTotal] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const url = "http://localhost:4000/transactions";
   const navigate = useNavigate();
@@ -79,6 +81,24 @@ const AddTransaction = () => {
     setData({ ...data, [e.target.name]: value });
   };
 
+  const handleProductSelect = (itemproduct) => {
+    setSelectedProduct(itemproduct);
+    const valueproduct = product.find((item) => item.id == itemproduct.id);
+    if (levelCust == 1) {
+      setPrice(valueproduct.SellingPrice[0].price1);
+    } else if (levelCust == 2) {
+      setPrice(valueproduct.SellingPrice[0].price2);
+    } else if (levelCust == 3) {
+      setPrice(valueproduct.SellingPrice[0].price3);
+    } else if (levelCust == 4) {
+      setPrice(valueproduct.SellingPrice[0].price4);
+    } else if (levelCust == 5) {
+      setPrice(valueproduct.SellingPrice[0].price5);
+    } else {
+      setPrice(valueproduct.SellingPrice[0].price0);
+    }
+  };
+
   const calculateTotal = () => {
     setTotal(data.jumlah_beli * price);
   };
@@ -92,7 +112,7 @@ const AddTransaction = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
-      product_id: +selectedProduct,
+      product_id: selectedProduct.id,
       customer_id: +selectValue,
       tanggal: new Date(data.tanggal),
       total: +total,
@@ -149,20 +169,17 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Customer Level
               </label>
-              <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="customer_level"
-                type="number"
-                name="customer_level"
-                value={levelCust}
-                readOnly
-              />
+              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="customer_level" type="number" name="customer_level" value={levelCust} readOnly />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
-                Product Name
+                Choose Product
               </label>
-              <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="product_id" value={selectedProduct} onChange={handleProductChange}>
+              <button onClick={() => setShowModal(true)} className="bg-blue-500 w-5/6 text-white p-2 rounded">
+                Choose
+              </button>
+              <Modal showModal={showModal} setShowModal={setShowModal} onProductSelect={handleProductSelect} />
+              {/* <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="product_id" value={selectedProduct} onChange={handleProductChange}>
                 <option className="text-center md:text-base text-xs" value="">
                   Choose
                 </option>
@@ -171,7 +188,21 @@ const AddTransaction = () => {
                     {item.name} - {item.Color.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
+            </div>
+            <div className="mb-4 mt-5">
+              <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
+                Product Name
+              </label>
+              <input type="number" hidden name="product_id" value={selectedProduct ? selectedProduct.id : ""} />
+              <input
+                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="price_per_piece"
+                type="text"
+                name="price_per_piece"
+                value={selectedProduct ? selectedProduct.name : ""}
+                readOnly
+              />
             </div>
           </div>
           <div className="flex-1 flex-col">
@@ -185,16 +216,20 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="amount">
                 Purchase Amount
               </label>
-              <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="jumlah_beli"
-                type="number"
-                name="jumlah_beli"
-                value={data.jumlah_beli}
-                onChange={handleChange}
-                placeholder="Input Purchase Amount"
-                onKeyPress={handleKeypress}
-              />
+              <div className="flex">
+                <input
+                  className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="jumlah_beli"
+                  type="number"
+                  name="jumlah_beli"
+                  value={data.jumlah_beli}
+                  onChange={handleChange}
+                  placeholder="Input Purchase Amount"
+                />
+                <button className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
+                  Count
+                </button>
+              </div>
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
@@ -206,7 +241,14 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
                 Transaction Date
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="total" type="datetime-local" name="tanggal" value={data.tanggal} onChange={handleChange} />
+              <input
+                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="total"
+                type="datetime-local"
+                name="tanggal"
+                value={data.tanggal}
+                onChange={handleChange}
+              />
             </div>
           </div>
         </div>
