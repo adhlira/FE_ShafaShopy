@@ -32,24 +32,6 @@ const AddTransaction = () => {
     setLevelCust(selectedCustomer.Level.level);
   };
 
-  const handleProductChange = (e) => {
-    setSelectedProduct(e.target.value);
-    const valueproduct = product.find((item) => item.id == e.target.value);
-    if (levelCust == 1) {
-      setPrice(valueproduct.SellingPrice[0].price1);
-    } else if (levelCust == 2) {
-      setPrice(valueproduct.SellingPrice[0].price2);
-    } else if (levelCust == 3) {
-      setPrice(valueproduct.SellingPrice[0].price3);
-    } else if (levelCust == 4) {
-      setPrice(valueproduct.SellingPrice[0].price4);
-    } else if (levelCust == 5) {
-      setPrice(valueproduct.SellingPrice[0].price5);
-    } else {
-      setPrice(valueproduct.SellingPrice[0].price0);
-    }
-  };
-
   useEffect(() => {
     const FetchData = async () => {
       try {
@@ -101,12 +83,6 @@ const AddTransaction = () => {
 
   const calculateTotal = () => {
     setTotal(data.jumlah_beli * price);
-  };
-
-  const handleKeypress = (e) => {
-    if (e.key == "Enter") {
-      calculateTotal();
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -179,16 +155,6 @@ const AddTransaction = () => {
                 Choose
               </button>
               <Modal showModal={showModal} setShowModal={setShowModal} onProductSelect={handleProductSelect} />
-              {/* <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="product_id" value={selectedProduct} onChange={handleProductChange}>
-                <option className="text-center md:text-base text-xs" value="">
-                  Choose
-                </option>
-                {product.map((item) => (
-                  <option className="md:text-base text-xs" key={item.id} value={item.id}>
-                    {item.name} - {item.Color.name}
-                  </option>
-                ))}
-              </select> */}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
