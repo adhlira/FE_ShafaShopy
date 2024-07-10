@@ -41,6 +41,15 @@ const MonthlyReport = () => {
   const totalAmount = data.reduce((sum, item) => sum + item.total, 0);
   console.log(totalAmount);
 
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
   return (
     <>
       <div className="justify-between">
@@ -91,14 +100,14 @@ const MonthlyReport = () => {
               <td className="border">{index + 1}</td>
               <td className="border">{formatDate(item.tanggal)}</td>
               <td className="border">{item.Product?.name}</td>
-              <td className="border">Rp. {item.total}</td>
+              <td className="border">{formatRupiah(item.total)}</td>
             </tr>
           ))}
           <tr className="font-bold">
             <td colSpan={3} className="border text-center">
               Total
             </td>
-            <td className="text-center">Rp. {totalAmount}</td>
+            <td className="text-center">{formatRupiah(totalAmount)}</td>
           </tr>
         </tbody>
       </table>

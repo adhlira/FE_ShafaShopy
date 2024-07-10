@@ -20,6 +20,15 @@ const DetailProduct = () => {
     fetchData();
   }, {});
 
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
   return (
     <>
       <div className="flex justify-between">
@@ -53,34 +62,34 @@ const DetailProduct = () => {
 
             <span className="font-semibold">Purchase Price</span>
             <span>:</span>
-            <span>Rp. {product.purchase_price}</span>
+            <span>{formatRupiah(product.purchase_price)}</span>
           </div>
         </div>
         <div className="flex-1 flex-col ml-5">
           <div className="grid grid-cols-3 gap-6 text-left">
             <span className="font-semibold">Price Level 0</span>
             <span>:</span>
-            <span>Rp. {product.SellingPrice?.[0]?.price0}</span>
+            <span>{formatRupiah(product.SellingPrice?.[0]?.price0)}</span>
 
             <span className="font-semibold">Price Level 1</span>
             <span>:</span>
-            <span>Rp. {product.SellingPrice?.[0]?.price1}</span>
+            <span>{formatRupiah(product.SellingPrice?.[0]?.price1)}</span>
 
             <span className="font-semibold">Price Level 2</span>
             <span>:</span>
-            <span>Rp. {product.SellingPrice?.[0]?.price2}</span>
+            <span>{formatRupiah(product.SellingPrice?.[0]?.price2)}</span>
 
             <span className="font-semibold">Price Level 3</span>
             <span>:</span>
-            <span>Rp. {product.SellingPrice?.[0]?.price3}</span>
+            <span>{formatRupiah(product.SellingPrice?.[0]?.price3)}</span>
 
             <span className="font-semibold">Price Level 4</span>
             <span>:</span>
-            <span>Rp. {product.SellingPrice?.[0]?.price4}</span>
+            <span>{formatRupiah(product.SellingPrice?.[0]?.price4)}</span>
 
             <span className="font-semibold">Price Level 5</span>
             <span>:</span>
-            <span>Rp. {product.SellingPrice?.[0]?.price5}</span>
+            <span>{formatRupiah(product.SellingPrice?.[0]?.price5)}</span>
           </div>
         </div>
       </div>

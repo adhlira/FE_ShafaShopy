@@ -45,6 +45,15 @@ const Products = () => {
     }
   };
 
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
   return (
     <>
       <div className="flex justify-between">
@@ -83,12 +92,12 @@ const Products = () => {
               <td className="border">{index + 1}</td>
               <td className="border">{item.Product?.name}</td>
               <td className="border">{item.Product?.Color?.name}</td>
-              <td className="border">Rp. {item.price0}</td>
-              <td className="border">Rp. {item.price1}</td>
-              <td className="border">Rp. {item.price2}</td>
-              <td className="border">Rp. {item.price3}</td>
-              <td className="border">Rp. {item.price4}</td>
-              <td className="border">Rp. {item.price5}</td>
+              <td className="border">{formatRupiah(item.price0)}</td>
+              <td className="border">{formatRupiah(item.price1)}</td>
+              <td className="border">{formatRupiah(item.price2)}</td>
+              <td className="border">{formatRupiah(item.price3)}</td>
+              <td className="border">{formatRupiah(item.price4)}</td>
+              <td className="border">{formatRupiah(item.price5)}</td>              
               <td className="border">
                 <Link to={`/sellingprice/edit/${item.id}`}>
                   <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>

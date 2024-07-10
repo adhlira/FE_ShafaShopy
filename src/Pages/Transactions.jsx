@@ -43,12 +43,20 @@ const Transaction = () => {
     }
   };
 
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
 
   // Get current posts
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
   const currentPosts = transaction.slice(indexOfFirstPost, indexOfLastPost);
-  console.log(currentPosts)
+  console.log(currentPosts);
 
   return (
     <>
@@ -76,7 +84,7 @@ const Transaction = () => {
               <td className="border">{item.Product?.name}</td>
               <td className="border">{formatDate(item.tanggal)}</td>
               <td className="border">{item.Detail_Transaction?.[0]?.jumlah_beli}</td>
-              <td className="border">Rp. {item.total}</td>
+              <td className="border">{formatRupiah(item.total)}</td>
               <td className="border">
                 <Link to={`/transactions/detail/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white">Detail</button>
