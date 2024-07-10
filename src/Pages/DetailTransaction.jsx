@@ -19,6 +19,15 @@ const DetailTransaction = () => {
     };
     fetchData();
   }, {});
+
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
   return (
     <>
       <div className="flex justify-between">
@@ -55,7 +64,7 @@ const DetailTransaction = () => {
         <div className="grid grid-cols-3 gap-6 text-left">
             <span className="font-semibold">Price per Piece</span>
             <span>:</span>
-            <span className="">Rp. {detail.Detail_Transaction?.[0]?.price_per_piece}</span>
+            <span className="">{formatRupiah(detail.Detail_Transaction?.[0]?.price_per_piece)}</span>
 
             <span className="font-semibold">Purchase Amount</span>
             <span>:</span>
@@ -63,7 +72,7 @@ const DetailTransaction = () => {
 
             <span className="font-semibold">Total</span>
             <span>:</span>
-            <span className="">Rp. {detail.total}</span>
+            <span className="">{formatRupiah(detail.total)}</span>
           </div>
         </div>
       </div>

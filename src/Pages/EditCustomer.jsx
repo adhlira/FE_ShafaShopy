@@ -78,7 +78,7 @@ const EditCustomer = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Edit Customer</h1>
         <Link to={"/customers"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Kembali</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
         </Link>
       </div>
       <form className="w-full max-w-lg mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit} action="">
@@ -146,7 +146,7 @@ const EditCustomer = () => {
           />
         </div>
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
-          Simpan
+          Save
         </button>
       </form>
     </>

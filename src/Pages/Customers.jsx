@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Pagination from "../Components/Pagination";
 import axios from "axios";
 
 const Customer = () => {
   const [customer, setCustomer] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const itemsPerPage = 8
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,13 +18,14 @@ const Customer = () => {
         const response = await axios.get("http://localhost:4000/customers");
         setCustomer(response.data);
         setFilteredData(response.data);
+        setTotalPages(response.data.length)
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const deleteData = async (id) => {
     const check = confirm("Anda yakin ingin menghapus data ini ? ");
@@ -44,6 +50,12 @@ const Customer = () => {
       setFilteredData(data);
     }
   };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentPosts = customer.slice(indexOfFirstPost, indexOfLastPost);
+  console.log(currentPosts);
 
   return (
     <>
@@ -89,7 +101,7 @@ const Customer = () => {
                 </Link>
                 <Link>
                   <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white" onClick={() => deleteData(item.id)}>
-                    Hapus
+                    Delete
                   </button>
                 </Link>
               </td>
@@ -97,6 +109,9 @@ const Customer = () => {
           ))}
         </tbody>
       </table>
+      <div className="text-center mt-10">
+        <Pagination totalPosts={totalPages} postsPerPage={itemsPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} />
+      </div>
     </>
   );
 };
