@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Pagination from "../Components/Pagination";
 import axios from "axios";
 
 const Products = () => {
   const [sellingprice, setSellingPrice] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const itemsPerPage = 8
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,13 +18,14 @@ const Products = () => {
         const response = await axios.get("http://localhost:4000/sellingprice");
         setSellingPrice(response.data);
         setFilteredData(response.data)
+        setTotalPages(response.data.length)
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const deleteData = async (id) => {
     const check = confirm("Anda yakin ingin menghapus data ini ? ");
@@ -53,6 +59,12 @@ const Products = () => {
       maximumFractionDigits: 0,
     }).format(number);
   };
+
+   // Get current posts
+   const indexOfLastPost = currentPage * itemsPerPage;
+   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+   const currentPosts = sellingprice.slice(indexOfFirstPost, indexOfLastPost);
+   console.log(currentPosts);
 
   return (
     <>
@@ -112,6 +124,9 @@ const Products = () => {
           ))}
         </tbody>
       </table>
+      <div className="text-center mt-10">
+        <Pagination totalPosts={totalPages} postsPerPage={itemsPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} />
+      </div>
     </>
   );
 };
