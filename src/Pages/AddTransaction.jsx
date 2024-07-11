@@ -2,18 +2,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "./ModalProduct.jsx";
+import ModalCustomer from "./ModalCustomer.jsx";
 
 const AddTransaction = () => {
   const [data, setData] = useState({ product_id: "", customer_id: "", tanggal: "", total: "", jumlah_beli: "", price_per_piece: "" });
   const [product, setProduct] = useState([]);
   const [customer, setCustomer] = useState([]);
   const [isReseller, setIsReseller] = useState(false);
-  const [selectValue, setSelectValue] = useState();
+  // const [selectValue, setSelectValue] = useState();
   const [levelCust, setLevelCust] = useState();
   const [selectedProduct, setSelectedProduct] = useState();
+  const [selectedCustomer, setSelectedCustomer] = useState();
   const [price, setPrice] = useState();
   const [total, setTotal] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [showModalCustomer, setShowModalCustomer] = useState(false);
 
   const url = "http://localhost:4000/transactions";
   const navigate = useNavigate();
@@ -21,16 +24,17 @@ const AddTransaction = () => {
   const handleRadioChange = (e) => {
     setIsReseller(e.target.value === "Reseller");
     if (e.target.value === "Non Reseller") {
-      setSelectValue(1);
+      // setSelectValue(1);
+      setSelectedCustomer(1);
       setLevelCust(0);
     }
   };
 
-  const handleSelectCustomerChange = (e) => {
-    setSelectValue(e.target.value);
-    const selectedCustomer = customer.find((item) => item.id == e.target.value);
-    setLevelCust(selectedCustomer.Level.level);
-  };
+  // const handleSelectCustomerChange = (e) => {
+  //   setSelectValue(e.target.value);
+  //   const selectedCustomer = customer.find((item) => item.id == e.target.value);
+  //   setLevelCust(selectedCustomer.Level.level);
+  // };
 
   useEffect(() => {
     const FetchData = async () => {
@@ -63,6 +67,11 @@ const AddTransaction = () => {
     setData({ ...data, [e.target.name]: value });
   };
 
+  const handleCustomerSelect = (itemCustomer) => {
+    setSelectedCustomer(itemCustomer);
+    setLevelCust(itemCustomer.Level.level);
+  };
+
   const handleProductSelect = (itemproduct) => {
     setSelectedProduct(itemproduct);
     const valueproduct = product.find((item) => item.id == itemproduct.id);
@@ -89,7 +98,7 @@ const AddTransaction = () => {
     e.preventDefault();
     const userData = {
       product_id: selectedProduct.id,
-      customer_id: +selectValue,
+      customer_id: +selectedCustomer.id,
       tanggal: new Date(data.tanggal),
       total: +total,
       jumlah_beli: +data.jumlah_beli,
@@ -119,7 +128,7 @@ const AddTransaction = () => {
           <div className="flex-1 flex-col">
             <div className="mb-8 mt-5">
               <label htmlFor="customer_type" className="block text-gray-700 md:text-sm text-base font-bold mb-2">
-                Customer
+                Customer Type
               </label>
               <input className="form-radio" id="customer_type" type="radio" name="customer_type" value="Non Reseller" onChange={handleRadioChange} />
               <span className="ml-3 font-semibold text-base">Non Reseller</span>
@@ -128,9 +137,13 @@ const AddTransaction = () => {
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
-                Customer Name
+                Choose Customer
               </label>
-              <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="customer_id" value={selectValue} onChange={handleSelectCustomerChange} disabled={!isReseller}>
+              <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500 w-5/6 text-white p-2 rounded" disabled={!isReseller}>
+                Choose
+              </button>
+              <ModalCustomer showModalCustomer={showModalCustomer} setShowModalCustomer={setShowModalCustomer} onCustomerSelect={handleCustomerSelect} />
+              {/* <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="customer_id" value={selectValue} onChange={handleSelectCustomerChange} disabled={!isReseller}>
                 <option className="text-center md:text-base text-xs" value="">
                   Choose
                 </option>
@@ -139,7 +152,21 @@ const AddTransaction = () => {
                     {item.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
+            </div>
+            <div className="mb-4 mt-5">
+              <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
+                Customer Name
+              </label>
+              <input type="number" hidden name="customer_id" value={selectedCustomer ? selectedCustomer.id : ""} />
+              <input
+                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="price_per_piece"
+                type="text"
+                name="price_per_piece"
+                value={selectedCustomer ? selectedCustomer.name : ""}
+                readOnly
+              />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
@@ -156,6 +183,8 @@ const AddTransaction = () => {
               </button>
               <Modal showModal={showModal} setShowModal={setShowModal} onProductSelect={handleProductSelect} />
             </div>
+          </div>
+          <div className="flex-1 flex-col">
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Product Name
@@ -170,8 +199,6 @@ const AddTransaction = () => {
                 readOnly
               />
             </div>
-          </div>
-          <div className="flex-1 flex-col">
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Price
