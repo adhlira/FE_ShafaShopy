@@ -7,12 +7,11 @@ import ModalCustomer from "./ModalCustomer.jsx";
 const AddTransaction = () => {
   const [data, setData] = useState({ product_id: "", customer_id: "", tanggal: "", total: "", jumlah_beli: "", price_per_piece: "" });
   const [product, setProduct] = useState([]);
-  const [customer, setCustomer] = useState([]);
   const [isReseller, setIsReseller] = useState(false);
-  // const [selectValue, setSelectValue] = useState();
+  const [customerID, setCustomerID] = useState();
+  const [customerName, setCustomerName] = useState();
   const [levelCust, setLevelCust] = useState();
   const [selectedProduct, setSelectedProduct] = useState();
-  const [selectedCustomer, setSelectedCustomer] = useState();
   const [price, setPrice] = useState();
   const [total, setTotal] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -24,17 +23,11 @@ const AddTransaction = () => {
   const handleRadioChange = (e) => {
     setIsReseller(e.target.value === "Reseller");
     if (e.target.value === "Non Reseller") {
-      // setSelectValue(1);
-      setSelectedCustomer(1);
+      setCustomerID(1);
+      setCustomerName("Non Reseller");
       setLevelCust(0);
     }
   };
-
-  // const handleSelectCustomerChange = (e) => {
-  //   setSelectValue(e.target.value);
-  //   const selectedCustomer = customer.find((item) => item.id == e.target.value);
-  //   setLevelCust(selectedCustomer.Level.level);
-  // };
 
   useEffect(() => {
     const FetchData = async () => {
@@ -68,7 +61,8 @@ const AddTransaction = () => {
   };
 
   const handleCustomerSelect = (itemCustomer) => {
-    setSelectedCustomer(itemCustomer);
+    setCustomerID(itemCustomer.id);
+    setCustomerName(itemCustomer.name);
     setLevelCust(itemCustomer.Level.level);
   };
 
@@ -98,7 +92,7 @@ const AddTransaction = () => {
     e.preventDefault();
     const userData = {
       product_id: selectedProduct.id,
-      customer_id: +selectedCustomer.id,
+      customer_id: customerID,
       tanggal: new Date(data.tanggal),
       total: +total,
       jumlah_beli: +data.jumlah_beli,
@@ -158,13 +152,13 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Customer Name
               </label>
-              <input type="number" hidden name="customer_id" value={selectedCustomer ? selectedCustomer.id : ""} />
+              <input type="number" hidden className="border" name="customer_id" value={customerID} />
               <input
                 className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="price_per_piece"
                 type="text"
                 name="price_per_piece"
-                value={selectedCustomer ? selectedCustomer.name : ""}
+                value={customerName}
                 readOnly
               />
             </div>
