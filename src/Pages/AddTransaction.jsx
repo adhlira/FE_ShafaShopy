@@ -42,18 +42,18 @@ const AddTransaction = () => {
     FetchData();
   }, []);
 
-  useEffect(() => {
-    const FetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/customers");
-        setCustomer(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    FetchData();
-  }, []);
+  // useEffect(() => {
+  //   const FetchData = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:4000/customers");
+  //       setCustomer(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //   };
+  //   FetchData();
+  // }, []);
 
   const handleChange = (e) => {
     const value = e.target.value;

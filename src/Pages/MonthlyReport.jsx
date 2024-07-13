@@ -1,37 +1,50 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
+import Pagination from "../Components/Pagination";
 import axios from "axios";
 
 const MonthlyReport = () => {
   const [data, setData] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
+  const itemsPerPage = 12;
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/transactions");
         setData(response.data);
+        setTotalPages(response.data.length);
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const formatDate = (datetime) => {
     const date = new Date(datetime);
     return date.toLocaleDateString(); // Format tanggal saja
   };
 
+  const setToStartOfDay = (date) => {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0, 0);
+    return newDate;
+  };
+
   const DatabyDate = () => {
-    console.log(data);
     if (startDate || endDate) {
-      const filteredData = data.filter((item) => {
-        const itemDate = formatDate(item.tanggal);
-        const start = formatDate(startDate);
-        const end = formatDate(endDate);
-        return itemDate >= start && itemDate <= end;
+      const filteredData = data.filter(item => {
+        const itemDate = setToStartOfDay(new Date(item.tanggal));
+        const start = setToStartOfDay(new Date(startDate));
+        const end = setToStartOfDay(new Date(endDate));
+        return (!start || itemDate >= start) && (!end || itemDate <= end)
       });
       setData(filteredData);
       console.log(filteredData);
@@ -49,6 +62,12 @@ const MonthlyReport = () => {
       maximumFractionDigits: 0,
     }).format(number);
   };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+  console.log(currentPosts);
 
   return (
     <>
@@ -95,9 +114,9 @@ const MonthlyReport = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {currentPosts.map((item, index) => (
             <tr key={index} className="text-center">
-              <td className="border">{index + 1}</td>
+              <td className="border">{indexOfFirstPost + index + 1}</td>
               <td className="border">{formatDate(item.tanggal)}</td>
               <td className="border">{item.Product?.name}</td>
               <td className="border">{formatRupiah(item.total)}</td>
@@ -111,6 +130,9 @@ const MonthlyReport = () => {
           </tr>
         </tbody>
       </table>
+      <div className="text-center mt-10">
+        <Pagination totalPosts={totalPages} postsPerPage={itemsPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} />
+      </div>
     </>
   );
 };
