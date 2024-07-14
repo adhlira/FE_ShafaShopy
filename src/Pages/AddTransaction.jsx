@@ -42,19 +42,6 @@ const AddTransaction = () => {
     FetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const FetchData = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:4000/customers");
-  //       setCustomer(response.data);
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-  //   FetchData();
-  // }, []);
-
   const handleChange = (e) => {
     const value = e.target.value;
     setData({ ...data, [e.target.name]: value });
@@ -137,16 +124,6 @@ const AddTransaction = () => {
                 Choose
               </button>
               <ModalCustomer showModalCustomer={showModalCustomer} setShowModalCustomer={setShowModalCustomer} onCustomerSelect={handleCustomerSelect} />
-              {/* <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="customer_id" value={selectValue} onChange={handleSelectCustomerChange} disabled={!isReseller}>
-                <option className="text-center md:text-base text-xs" value="">
-                  Choose
-                </option>
-                {customer.map((item) => (
-                  <option className="md:text-base text-xs" key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select> */}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">

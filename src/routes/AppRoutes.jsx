@@ -23,6 +23,7 @@ import Transaction from "../Pages/Transactions.jsx";
 import AddTransaction from "../Pages/AddTransaction.jsx";
 import DetailTransaction from "../Pages/DetailTransaction.jsx";
 import MonthlyReport from "../Pages/MonthlyReport.jsx";
+import ResellerReport from "../Pages/ResellerReport.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       { path: "/transactions/add", element: <AddTransaction /> },
       { path: "/transactions/detail/:id", element: <DetailTransaction /> },
       { path: "/monthlyreport", element: <MonthlyReport /> },
+      { path: "/resellerreport", element: <ResellerReport /> },
     ],
   },
 ]);

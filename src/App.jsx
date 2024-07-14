@@ -12,6 +12,7 @@ const links = [
   { name: "Customers", path: "/customers" },
   { name: "Transactions", path: "/transactions" },
   { name: "Monthly Report", path: "/monthlyreport" },
+  { name: "Reseller Report", path: "/resellerreport" },
 ];
 
 function App() {
