@@ -10,7 +10,7 @@ const MonthlyReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 10;
   
   useEffect(() => {
     const fetchData = async () => {

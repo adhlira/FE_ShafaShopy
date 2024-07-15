@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ModalCustomer from "./ModalCustomer.jsx";
+import Pagination from "../Components/Pagination.jsx";
 import axios from "axios";
 
 const ResellerReport = () => {
@@ -7,19 +8,24 @@ const ResellerReport = () => {
   const [showModalCustomer, setShowModalCustomer] = useState(false);
   const [customerID, setCustomerID] = useState();
   const [customerName, setCustomerName] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const itemsPerPage = 10
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/allResellerReport");
         setData(response.data);
+        setTotalPages(response.data.length)
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
       }
     };
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const formatDate = (datetime) => {
     const date = new Date(datetime);
@@ -39,6 +45,12 @@ const ResellerReport = () => {
     setData(filteredData);
     console.log(filteredData);
   };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * itemsPerPage;
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+  const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+  console.log(currentPosts);
 
   return (
     <>
@@ -73,9 +85,9 @@ const ResellerReport = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {currentPosts.map((item, index) => (
             <tr key={index} className="text-center">
-              <td className="border">{index + 1}</td>
+              <td className="border">{indexOfFirstPost + index + 1}</td>
               <td className="border">{formatDate(item.tanggal)}</td>
               <td className="border">{item.Customer.name}</td>
               <td className="border">{item.Customer.Level.level}</td>
@@ -90,6 +102,9 @@ const ResellerReport = () => {
           </tr>
         </tbody>
       </table>
+      <div className="text-center mt-10">
+        <Pagination totalPosts={totalPages} postsPerPage={itemsPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} />
+      </div>
     </>
   );
 };
