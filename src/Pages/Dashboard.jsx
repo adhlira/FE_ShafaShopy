@@ -1,6 +1,75 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const Dashboard = () => <div>Ini adalah halaman Dashboard</div>;
+const Dashboard = () => {
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/transactions");
+        setTransactions(response.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const totalAmount = transactions.reduce((sum, item) => sum + item.total, 0);
+  console.log(totalAmount);
+
+  const totalSold = transactions.reduce((sum, item) => sum + item.Detail_Transaction[0].jumlah_beli, 0)
+
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
+  // Dapatkan tanggal saat ini
+  const today = new Date();
+
+  // Format tanggal menjadi string
+  const formattedDate = today.toLocaleDateString("id-ID", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return (
+    <>
+      <div className="flex justify-between">
+        <div className="flex flex-col">
+          <h1 className="text-2xl">Dashboard</h1>
+          <p className="text-sm mt-1">{formattedDate}</p>
+        </div>
+        <button className="border w-10 h-10 rounded-full bg-blue-400">A</button>
+      </div>
+      <div className="grid grid-cols-4 gap-4 h-screen mt-10">
+        <div className="border w-full h-1/2 text-center place-content-center bg-green-400 text-white rounded-lg p-2">
+          <h5 className="text-xl">Total Sales</h5>
+          <h1 className="text-3xl font-bold">{formatRupiah(totalAmount)}</h1>
+        </div>
+        <div className="border w-full h-1/2 place-content-center bg-yellow-400 text-white text-center rounded-lg p-2">
+          <h5 className="text-xl">Product Sold</h5>
+          <h1 className="text-3xl font-bold">{totalSold} Pcs</h1>
+        </div>
+        <div className="border w-full h-1/2 rounded-lg p-2">
+          <h5 className="text-xl">Total Sales</h5>
+        </div>
+        <div className="border w-full h-1/2 rounded-lg p-2">
+          <h5 className="text-xl">Total Sales</h5>
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default Dashboard;
