@@ -5,6 +5,20 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
+  const [bestProduct, setBestProduct] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/bestSellingProduct")
+        setBestProduct(response.data)
+        console.log(response.data)
+      } catch (error) {
+        console.log("erro", error)
+      }
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,11 +75,14 @@ const Dashboard = () => {
           <h5 className="text-xl">Product Sold</h5>
           <h1 className="text-3xl font-bold">{totalSold} Pcs</h1>
         </div>
-        <div className="border w-full h-1/2 rounded-lg p-2">
-          <h5 className="text-xl">Total Sales</h5>
+        <div className="border w-full place-content-center bg-blue-400 text-white text-center h-1/2 rounded-lg p-2">
+          <h5 className="text-xl">Best Selling Product</h5>
+          {bestProduct.map((item,index) => (
+          <h1 key={index} className="text-3xl font-bold">{item.productName} {item.colorName}</h1>
+        ))}
         </div>
-        <div className="border w-full h-1/2 rounded-lg p-2">
-          <h5 className="text-xl">Total Sales</h5>
+        <div className="border w-full place-content-center bg-red-400 text-white text-center h-1/2 rounded-lg p-2">
+          <h5 className="text-xl">Best Reseller</h5>
         </div>
       </div>
     </>
