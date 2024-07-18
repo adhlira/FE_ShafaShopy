@@ -6,19 +6,32 @@ import axios from "axios";
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [bestProduct, setBestProduct] = useState([]);
+  const [bestReseller, setBestReseller] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/bestSellingProduct")
-        setBestProduct(response.data)
-        console.log(response.data)
+        const response = await axios.get("http://localhost:4000/bestreseller");
+        setBestReseller(response.data);
       } catch (error) {
-        console.log("erro", error)
+        console.log("error", error);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/bestSellingProduct");
+        setBestProduct(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.log("erro", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +48,7 @@ const Dashboard = () => {
   const totalAmount = transactions.reduce((sum, item) => sum + item.total, 0);
   console.log(totalAmount);
 
-  const totalSold = transactions.reduce((sum, item) => sum + item.Detail_Transaction[0].jumlah_beli, 0)
+  const totalSold = transactions.reduce((sum, item) => sum + item.Detail_Transaction[0].jumlah_beli, 0);
 
   const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -77,12 +90,19 @@ const Dashboard = () => {
         </div>
         <div className="border w-full place-content-center bg-blue-400 text-white text-center h-1/2 rounded-lg p-2">
           <h5 className="text-xl">Best Selling Product</h5>
-          {bestProduct.map((item,index) => (
-          <h1 key={index} className="text-3xl font-bold">{item.productName} {item.colorName}</h1>
-        ))}
+          {bestProduct.map((item, index) => (
+            <h1 key={index} className="text-3xl font-bold">
+              {item.productName} {item.colorName}
+            </h1>
+          ))}
         </div>
         <div className="border w-full place-content-center bg-red-400 text-white text-center h-1/2 rounded-lg p-2">
           <h5 className="text-xl">Best Reseller</h5>
+          {bestReseller.map((item, index) => (
+            <h1 key={index} className="text-3xl font-bold">
+              {item.customerName}
+            </h1>
+          ))}
         </div>
       </div>
     </>
