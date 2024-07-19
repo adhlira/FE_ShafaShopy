@@ -13,6 +13,7 @@ const Dashboard = () => {
       try {
         const response = await axios.get("http://localhost:4000/bestreseller");
         setBestReseller(response.data);
+        console.log("best reseller : ",response.data)
       } catch (error) {
         console.log("error", error);
       }
@@ -100,7 +101,7 @@ const Dashboard = () => {
           <h5 className="text-xl">Best Reseller</h5>
           {bestReseller.map((item, index) => (
             <h1 key={index} className="text-3xl font-bold">
-              {item.customerName}
+              {item.name}
             </h1>
           ))}
         </div>
