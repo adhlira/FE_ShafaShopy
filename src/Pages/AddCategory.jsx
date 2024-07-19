@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
 import axios from "axios";
 
 const AddCategory = () => {
@@ -33,7 +34,7 @@ const AddCategory = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Add Categories</h1>
         <Link to={"/categories"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaArrowLeft/></button>
         </Link>
       </div>
       <form className="w-full max-w-lg mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit} action="">
@@ -52,7 +53,7 @@ const AddCategory = () => {
           />
         </div>
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
-          Simpan
+          Save
         </button>
       </form>
     </>

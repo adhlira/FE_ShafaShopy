@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaPlus } from "react-icons/fa6";
+import { FaPenToSquare } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
 import axios from "axios";
 
 const Category = () => {
@@ -37,7 +40,9 @@ const Category = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Categories</h1>
         <Link to={"/categories/add"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">
+            <FaPlus />
+          </button>
         </Link>
       </div>
       <table className="table border w-full mt-5">
@@ -55,11 +60,13 @@ const Category = () => {
               <td className="border">{item.name}</td>
               <td className="border">
                 <Link to={`/categories/edit/${item.id}`}>
-                  <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
+                  <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">
+                    <FaPenToSquare />
+                  </button>
                 </Link>
                 <Link>
                   <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white" onClick={() => deleteData(item.id)}>
-                    Hapus
+                    <FaTrash />
                   </button>
                 </Link>
               </td>
