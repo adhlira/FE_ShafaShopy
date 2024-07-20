@@ -4,7 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import axios from "axios";
 
 const EditProduct = () => {
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState({});
   const [category, setCategory] = useState([]);
   const [color, setColor] = useState([]);
   const { id } = useParams();

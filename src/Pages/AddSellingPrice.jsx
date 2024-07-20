@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
 import axios from "axios";
 
 const AddSellingPrice = () => {
@@ -53,7 +54,7 @@ const AddSellingPrice = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Add Selling Price</h1>
         <Link to={"/sellingPrices"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaArrowLeft/></button>
         </Link>
       </div>
       <form className="w-full mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit}>
