@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaArrowLeft, FaCalculator, FaBox, FaUsers } from "react-icons/fa6";
 import axios from "axios";
 import Modal from "./ModalProduct.jsx";
 import ModalCustomer from "./ModalCustomer.jsx";
@@ -101,10 +102,12 @@ const AddTransaction = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Add Transaction</h1>
         <Link to={"/transactions"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Back</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">
+            <FaArrowLeft />
+          </button>
         </Link>
       </div>
-      <form className="w-full mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit}>
+      <form className="w-full mx-auto p-6 rounded shadow-md mt-3" onSubmit={handleSubmit}>
         <div className="flex justify-between">
           <div className="flex-1 flex-col">
             <div className="mb-8 mt-5">
@@ -120,8 +123,8 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
                 Choose Customer
               </label>
-              <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500 w-5/6 text-white p-2 rounded" disabled={!isReseller}>
-                Choose
+              <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500 text-white p-2 rounded-lg" disabled={!isReseller}>
+                <FaUsers/>
               </button>
               <ModalCustomer showModalCustomer={showModalCustomer} setShowModalCustomer={setShowModalCustomer} onCustomerSelect={handleCustomerSelect} />
             </div>
@@ -149,8 +152,8 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
                 Choose Product
               </label>
-              <button onClick={() => setShowModal(true)} className="bg-blue-500 w-5/6 text-white p-2 rounded">
-                Choose
+              <button onClick={() => setShowModal(true)} className="bg-blue-500 text-white p-2 rounded-lg">
+                <FaBox/>
               </button>
               <Modal showModal={showModal} setShowModal={setShowModal} onProductSelect={handleProductSelect} />
             </div>
@@ -191,7 +194,7 @@ const AddTransaction = () => {
                   placeholder="Input Purchase Amount"
                 />
                 <button className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
-                  Count
+                  <FaCalculator />
                 </button>
               </div>
             </div>

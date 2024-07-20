@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../Components/Pagination";
+import { FaPlus } from "react-icons/fa6";
+import { FaPenToSquare } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
+import { FaInfo } from "react-icons/fa6";
 import axios from "axios";
 
 const Transaction = () => {
@@ -63,7 +67,7 @@ const Transaction = () => {
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Transactions</h1>
         <Link to={"/transactions/add"}>
-          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">Add Data</button>
+          <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaPlus/></button>
         </Link>
       </div>
       <table className="table border w-full mt-5">
@@ -87,14 +91,14 @@ const Transaction = () => {
               <td className="border">{formatRupiah(item.total)}</td>
               <td className="border">
                 <Link to={`/transactions/detail/${item.id}`}>
-                  <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white">Detail</button>
+                  <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white"><FaInfo/></button>
                 </Link>
                 <Link to={`/transactions/edit/${item.id}`}>
-                  <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">Edit</button>
+                  <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white"><FaPenToSquare/></button>
                 </Link>
                 <Link>
                   <button className="border p-2 ml-2 rounded-lg bg-red-800 hover:bg-red-700 text-white" onClick={() => deleteData(item.id)}>
-                    Hapus
+                    <FaTrash/>
                   </button>
                 </Link>
               </td>
