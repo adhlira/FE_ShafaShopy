@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ModalCustomer from "./ModalCustomer.jsx";
 import Pagination from "../Components/Pagination.jsx";
+import { FaFilter, FaUsers } from "react-icons/fa6";
 import axios from "axios";
 
 const ResellerReport = () => {
@@ -11,14 +12,14 @@ const ResellerReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const itemsPerPage = 10
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/allResellerReport");
         setData(response.data);
-        setTotalPages(response.data.length)
+        setTotalPages(response.data.length);
         console.log(response.data);
       } catch (error) {
         console.log("error", error);
@@ -58,8 +59,8 @@ const ResellerReport = () => {
         <h1 className="text-2xl">Reseller Report</h1>
       </div>
       <div className="flex justify-between gap-2 mt-5">
-        <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500 w-5/6 text-white p-2 rounded">
-          Choose Reseller
+        <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500  text-white p-2 rounded">
+          <FaUsers />
         </button>
         <ModalCustomer showModalCustomer={showModalCustomer} setShowModalCustomer={setShowModalCustomer} onCustomerSelect={handleCustomerSelect} />
         <input type="number" hidden className="border" name="customer_id" value={customerID} />
@@ -72,7 +73,9 @@ const ResellerReport = () => {
           placeholder="Reseller name"
           readOnly
         />
-        <button onClick={DatabyName} className="bg-blue-500 rounded-lg p-2 text-white">Filter</button>
+        <button onClick={DatabyName} className="bg-blue-500 rounded-lg p-2 text-white">
+          <FaFilter />
+        </button>
       </div>
       <table className="border w-full mt-5">
         <thead>

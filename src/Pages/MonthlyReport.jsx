@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import Pagination from "../Components/Pagination";
+import { FaFilter } from "react-icons/fa6";
 import axios from "axios";
 
 const MonthlyReport = () => {
@@ -98,7 +99,7 @@ const MonthlyReport = () => {
             value={endDate}
           />
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white" onClick={DatabyDate}>
-            Filter
+            <FaFilter/>
           </button>
         </div>
       </div>

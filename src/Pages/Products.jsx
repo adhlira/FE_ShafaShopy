@@ -4,7 +4,7 @@ import Pagination from "../Components/Pagination";
 import { FaPlus } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa6";
 import { FaPenToSquare } from "react-icons/fa6";
-import { FaCircleInfo } from "react-icons/fa6";
+import { FaInfo } from "react-icons/fa6";
 import axios from "axios";
 
 const Products = () => {
@@ -97,7 +97,7 @@ const Products = () => {
               <td className="border">{item.stock}</td>
               <td className="border">
                 <Link to={`/products/${item.id}`}>
-                  <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white"><FaCircleInfo/></button>
+                  <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white"><FaInfo/></button>
                 </Link>
                 <Link to={`/products/edit/${item.id}`}>
                   <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white"><FaPenToSquare/></button>
