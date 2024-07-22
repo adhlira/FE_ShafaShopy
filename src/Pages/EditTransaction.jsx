@@ -19,18 +19,54 @@ const EditTransaction = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalCustomer, setShowModalCustomer] = useState(false);
   const [transactions, setTransactions] = useState({});
+  const [jumlah_beli, setJumlahBeli] = useState();
   const { id } = useParams();
 
   const url = `http://localhost:4000/transactions/${id}`;
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/transactions/${id}`);
+        setTransactions(response.data);
+        console.log("data by id : ", response.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, {});
+
   const handleRadioChange = (e) => {
-    setIsReseller(e.target.value === "Reseller");
-    if (e.target.value === "Non Reseller") {
-      setCustomerID(1);
-      setCustomerName("Non Reseller");
-      setLevelCust(0);
-    }
+    const { value } = e.target;
+    setTransactions((prevState) => ({
+      ...prevState,
+      Customer: {
+        ...prevState.Customer,
+        Level: {
+          ...prevState.Customer.Level,
+          level: value === "Reseller" ? 2 : 0, // Misalkan level > 1 untuk reseller dan level 0 untuk non-reseller
+        },
+      },
+    }));
+    // setIsReseller(e.target.value === "Reseller");
+    // if (e.target.value === "Non Reseller") {
+    //   setCustomerID(1);
+    //   setCustomerName("Non Reseller");
+    //   setLevelCust(0);
+    // }
+  };
+
+  const detailChange = (index, e) => {
+    const detail = [...transactions.Detail_Transaction];
+    detail[index] = {
+      ...detail[index],
+      [e.target.name]: e.target.value,
+    };
+    setTransactions({ ...transactions, Detail_Transaction: detail });
+    setJumlahBeli(detail[0].jumlah_beli);
+    setPrice(detail[0].price_per_piece);
   };
 
   useEffect(() => {
@@ -48,7 +84,7 @@ const EditTransaction = () => {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setData({ ...data, [e.target.name]: value });
+    setTransactions({ ...transactions, [e.target.name]: value });
   };
 
   const handleCustomerSelect = (itemCustomer) => {
@@ -76,7 +112,7 @@ const EditTransaction = () => {
   };
 
   const calculateTotal = () => {
-    setTotal(data.jumlah_beli * price);
+    setTotal(jumlah_beli * price);
   };
 
   const formatDate = (dateString) => {
@@ -90,23 +126,10 @@ const EditTransaction = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:4000/transactions/${id}`);
-        setTransactions(response.data);
-        console.log("data by id : ", response.data);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchData();
-  }, {});
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
-      product_id: selectedProduct.id,
+      product_id: transactions.Product?.id,
       customer_id: customerID,
       tanggal: new Date(data.tanggal),
       total: +total,
@@ -133,16 +156,16 @@ const EditTransaction = () => {
           </button>
         </Link>
       </div>
-      <form className="w-full mx-auto p-6 rounded shadow-md mt-3" onSubmit={handleSubmit}>
+      <form className="w-full mx-auto p-6 rounded shadow-md mt-3">
         <div className="flex justify-between">
           <div className="flex-1 flex-col">
             <div className="mb-8 mt-5">
               <label htmlFor="customer_type" className="block text-gray-700 md:text-sm text-base font-bold mb-2">
                 Customer Type
               </label>
-              <input className="form-radio" id="customer_type" type="radio" name="customer_type" value="Non Reseller" onChange={handleRadioChange} />
+              <input className="form-radio" id="customer_type" type="radio" name="customer_type" value="Non Reseller" onChange={handleRadioChange} checked={transactions.Customer?.Level?.level == 0} />
               <span className="ml-3 font-semibold text-base">Non Reseller</span>
-              <input className="form-radio ml-5" id="customer_type" type="radio" name="customer_type" value="Reseller" onChange={handleRadioChange} />
+              <input className="form-radio ml-5" id="customer_type" type="radio" name="customer_type" value="Reseller" onChange={handleRadioChange} checked={transactions.Customer?.Level?.level > 0} />
               <span className="ml-3 font-semibold text-base">Reseller</span>
             </div>
             <div className="mb-4 mt-5">
@@ -172,7 +195,14 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Customer Level
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="customer_level" type="number" name="customer_level" value={transactions?.Customer?.Level?.level} readOnly />
+              <input
+                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="customer_level"
+                type="number"
+                name="customer_level"
+                value={transactions?.Customer?.Level?.level}
+                readOnly
+              />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
@@ -203,22 +233,32 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Price
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price_per_piece" type="number" name="price_per_piece" value={transactions?.Detail_Transaction?.[0]?.price_per_piece} readOnly />
+              <input
+                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="price_per_piece"
+                type="number"
+                name="price_per_piece"
+                value={transactions?.Detail_Transaction?.[0]?.price_per_piece}
+                readOnly
+              />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="amount">
                 Purchase Amount
               </label>
               <div className="flex">
-                <input
-                  className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="jumlah_beli"
-                  type="number"
-                  name="jumlah_beli"
-                  value={transactions?.Detail_Transaction?.[0]?.jumlah_beli}
-                  onChange={handleChange}
-                  placeholder="Input Purchase Amount"
-                />
+                {transactions.Detail_Transaction?.map((detail, index) => (
+                  <input
+                    key={index}
+                    className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="jumlah_beli"
+                    type="number"
+                    name="jumlah_beli"
+                    value={detail.jumlah_beli}
+                    onChange={(e) => detailChange(index, e)}
+                    placeholder="Input Purchase Amount"
+                  />
+                ))}
                 <button className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
                   <FaCalculator />
                 </button>
@@ -247,7 +287,7 @@ const EditTransaction = () => {
         </div>
 
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
-          Save
+          Save Change
         </button>
       </form>
     </>
