@@ -13,6 +13,7 @@ const EditTransaction = () => {
   const [customerID, setCustomerID] = useState();
   const [customerName, setCustomerName] = useState();
   const [levelCust, setLevelCust] = useState();
+  const [customerType, setCustomerType] = useState("");
   const [selectedProduct, setSelectedProduct] = useState();
   const [price, setPrice] = useState();
   const [total, setTotal] = useState();
@@ -30,6 +31,15 @@ const EditTransaction = () => {
       try {
         const response = await axios.get(`http://localhost:4000/transactions/${id}`);
         setTransactions(response.data);
+        setLevelCust(response.data.Customer.Level.level);
+        setCustomerName(response.data.Customer.name);
+        if (response.data.Customer.Level.level == 0) {
+          setCustomerType("Non Reseller");
+          setIsReseller(false);
+        } else {
+          setCustomerType("Reseller");
+          setIsReseller(true);
+        }
         console.log("data by id : ", response.data);
       } catch (error) {
         console.log("error", error);
@@ -39,23 +49,19 @@ const EditTransaction = () => {
   }, {});
 
   const handleRadioChange = (e) => {
-    const { value } = e.target;
-    setTransactions((prevState) => ({
-      ...prevState,
-      Customer: {
-        ...prevState.Customer,
-        Level: {
-          ...prevState.Customer.Level,
-          level: value === "Reseller" ? 2 : 0, // Misalkan level > 1 untuk reseller dan level 0 untuk non-reseller
-        },
-      },
-    }));
-    // setIsReseller(e.target.value === "Reseller");
-    // if (e.target.value === "Non Reseller") {
-    //   setCustomerID(1);
-    //   setCustomerName("Non Reseller");
-    //   setLevelCust(0);
-    // }
+    const selectedType = e.target.value;
+    console.log("selectedtype", selectedType);
+    setCustomerType(selectedType);
+    if (selectedType === "Non Reseller") {
+      setCustomerName("Non Reseller");
+      setCustomerID(1);
+      setLevelCust(0);
+      setIsReseller(false);
+    } else {
+      setCustomerName("");
+      setLevelCust("");
+      setIsReseller(true);
+    }
   };
 
   const detailChange = (index, e) => {
@@ -156,16 +162,16 @@ const EditTransaction = () => {
           </button>
         </Link>
       </div>
-      <form className="w-full mx-auto p-6 rounded shadow-md mt-3">
+      <form className="w-full mx-auto p-6 rounded shadow-md mt-3" >
         <div className="flex justify-between">
           <div className="flex-1 flex-col">
             <div className="mb-8 mt-5">
               <label htmlFor="customer_type" className="block text-gray-700 md:text-sm text-base font-bold mb-2">
                 Customer Type
               </label>
-              <input className="form-radio" id="customer_type" type="radio" name="customer_type" value="Non Reseller" onChange={handleRadioChange} checked={transactions.Customer?.Level?.level == 0} />
+              <input className="form-radio" id="customer_type" type="radio" name="customer_type" value="Non Reseller" onChange={handleRadioChange} checked={customerType === "Non Reseller"} />
               <span className="ml-3 font-semibold text-base">Non Reseller</span>
-              <input className="form-radio ml-5" id="customer_type" type="radio" name="customer_type" value="Reseller" onChange={handleRadioChange} checked={transactions.Customer?.Level?.level > 0} />
+              <input className="form-radio ml-5" id="customer_type" type="radio" name="customer_type" value="Reseller" onChange={handleRadioChange} checked={customerType === "Reseller"} />
               <span className="ml-3 font-semibold text-base">Reseller</span>
             </div>
             <div className="mb-4 mt-5">
@@ -187,7 +193,8 @@ const EditTransaction = () => {
                 id="price_per_piece"
                 type="text"
                 name="price_per_piece"
-                value={transactions?.Customer?.name}
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
                 readOnly
               />
             </div>
@@ -200,7 +207,8 @@ const EditTransaction = () => {
                 id="customer_level"
                 type="number"
                 name="customer_level"
-                value={transactions?.Customer?.Level?.level}
+                value={levelCust}
+                onChange={(e) => setLevelCust(e.target.value)}
                 readOnly
               />
             </div>
