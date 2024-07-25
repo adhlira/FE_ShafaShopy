@@ -7,14 +7,14 @@ import Modal from "./ModalProduct.jsx";
 import ModalCustomer from "./ModalCustomer.jsx";
 
 const EditTransaction = () => {
-  const [data, setData] = useState({ product_id: "", customer_id: "", tanggal: "", total: "", jumlah_beli: "", price_per_piece: "" });
   const [product, setProduct] = useState([]);
   const [isReseller, setIsReseller] = useState(false);
   const [customerID, setCustomerID] = useState();
   const [customerName, setCustomerName] = useState();
   const [levelCust, setLevelCust] = useState();
   const [customerType, setCustomerType] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState();
+  const [productName, setProductName] = useState();
+  const [productID, setProductID] = useState();
   const [price, setPrice] = useState();
   const [total, setTotal] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +33,12 @@ const EditTransaction = () => {
         setTransactions(response.data);
         setLevelCust(response.data.Customer.Level.level);
         setCustomerName(response.data.Customer.name);
+        setProductName(response.data.Product.name);
+        setProductID(response.data.product_id);
+        setPrice(response.data.Detail_Transaction[0].price_per_piece);
+        setTotal(response.data.total);
+        setCustomerID(response.data.customer_id);
+        setJumlahBeli(response.data.Detail_Transaction[0].jumlah_beli);
         if (response.data.Customer.Level.level == 0) {
           setCustomerType("Non Reseller");
           setIsReseller(false);
@@ -56,10 +62,18 @@ const EditTransaction = () => {
       setCustomerName("Non Reseller");
       setCustomerID(1);
       setLevelCust(0);
+      setProductName("");
+      setPrice("");
+      setJumlahBeli("");
+      setTotal("");
       setIsReseller(false);
     } else {
       setCustomerName("");
       setLevelCust("");
+      setProductName("");
+      setPrice("");
+      setJumlahBeli("");
+      setTotal("");
       setIsReseller(true);
     }
   };
@@ -100,8 +114,11 @@ const EditTransaction = () => {
   };
 
   const handleProductSelect = (itemproduct) => {
-    setSelectedProduct(itemproduct);
+    setProductName(itemproduct.name);
+    setProductID(itemproduct.id);
     const valueproduct = product.find((item) => item.id == itemproduct.id);
+    console.log("value product", valueproduct);
+    console.log("level cust", levelCust);
     if (levelCust == 1) {
       setPrice(valueproduct.SellingPrice[0].price1);
     } else if (levelCust == 2) {
@@ -135,11 +152,11 @@ const EditTransaction = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
-      product_id: transactions.Product?.id,
+      product_id: productID,
       customer_id: customerID,
-      tanggal: new Date(data.tanggal),
+      tanggal: new Date(transactions.tanggal),
       total: +total,
-      jumlah_beli: +data.jumlah_beli,
+      jumlah_beli: +jumlah_beli,
       price_per_piece: +price,
       subtotal: +total,
     };
@@ -162,7 +179,7 @@ const EditTransaction = () => {
           </button>
         </Link>
       </div>
-      <form className="w-full mx-auto p-6 rounded shadow-md mt-3" >
+      <form className="w-full mx-auto p-6 rounded shadow-md mt-3" onSubmit={handleSubmit}>
         <div className="flex justify-between">
           <div className="flex-1 flex-col">
             <div className="mb-8 mt-5">
@@ -178,7 +195,7 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
                 Choose Customer
               </label>
-              <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500 text-white p-2 rounded-lg" disabled={!isReseller}>
+              <button type="button" onClick={() => setShowModalCustomer(true)} className="bg-blue-500 text-white p-2 rounded-lg" disabled={!isReseller}>
                 <FaUsers />
               </button>
               <ModalCustomer showModalCustomer={showModalCustomer} setShowModalCustomer={setShowModalCustomer} onCustomerSelect={handleCustomerSelect} />
@@ -216,7 +233,7 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
                 Choose Product
               </label>
-              <button onClick={() => setShowModal(true)} className="bg-blue-500 text-white p-2 rounded-lg">
+              <button type="button" onClick={() => setShowModal(true)} className="bg-blue-500 text-white p-2 rounded-lg">
                 <FaBox />
               </button>
               <Modal showModal={showModal} setShowModal={setShowModal} onProductSelect={handleProductSelect} />
@@ -227,28 +244,14 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Product Name
               </label>
-              <input type="number" hidden name="product_id" value={selectedProduct ? selectedProduct.id : ""} />
-              <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="price_per_piece"
-                type="text"
-                name="price_per_piece"
-                value={transactions?.Product?.name}
-                readOnly
-              />
+              <input type="number" hidden name="product_id" value={productID} />
+              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value={productName} readOnly />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Price
               </label>
-              <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="price_per_piece"
-                type="number"
-                name="price_per_piece"
-                value={transactions?.Detail_Transaction?.[0]?.price_per_piece}
-                readOnly
-              />
+              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price_per_piece" type="number" name="price_per_piece" value={price} readOnly />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="amount">
@@ -262,12 +265,12 @@ const EditTransaction = () => {
                     id="jumlah_beli"
                     type="number"
                     name="jumlah_beli"
-                    value={detail.jumlah_beli}
+                    value={jumlah_beli}
                     onChange={(e) => detailChange(index, e)}
                     placeholder="Input Purchase Amount"
                   />
                 ))}
-                <button className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
+                <button type="button" className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
                   <FaCalculator />
                 </button>
               </div>
@@ -276,7 +279,7 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
                 Total
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="total" type="number" name="total" value={transactions?.total} readOnly />
+              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="total" type="number" name="total" value={total} readOnly />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
