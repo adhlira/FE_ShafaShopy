@@ -163,7 +163,7 @@ const EditTransaction = () => {
     try {
       const response = await axios.put(url, userData);
       console.log(response);
-      alert("Data Berhasil ditambahkan !");
+      alert("Data Berhasil diubah !");
       navigate("/transactions");
     } catch (error) {
       console.log(error);
