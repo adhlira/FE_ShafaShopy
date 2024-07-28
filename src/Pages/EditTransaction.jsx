@@ -56,7 +56,6 @@ const EditTransaction = () => {
 
   const handleRadioChange = (e) => {
     const selectedType = e.target.value;
-    console.log("selectedtype", selectedType);
     setCustomerType(selectedType);
     if (selectedType === "Non Reseller") {
       setCustomerName("Non Reseller");
@@ -85,8 +84,13 @@ const EditTransaction = () => {
       [e.target.name]: e.target.value,
     };
     setTransactions({ ...transactions, Detail_Transaction: detail });
-    setJumlahBeli(detail[0].jumlah_beli);
-    setPrice(detail[0].price_per_piece);
+    if (e.target.name === 'jumlah_beli') {
+      setJumlahBeli(e.target.value);
+    }
+  
+    if (e.target.name === 'price_per_piece') {
+      setPrice(e.target.value);
+    }
   };
 
   useEffect(() => {
@@ -114,22 +118,29 @@ const EditTransaction = () => {
   };
 
   const handleProductSelect = (itemproduct) => {
-    setProductName(itemproduct.name);
+    setProductName("")
+    setPrice("")
+    setJumlahBeli("")
+    setTotal("")
     setProductID(itemproduct.id);
     const valueproduct = product.find((item) => item.id == itemproduct.id);
-    console.log("value product", valueproduct);
-    console.log("level cust", levelCust);
     if (levelCust == 1) {
+      setProductName(valueproduct.name)
       setPrice(valueproduct.SellingPrice[0].price1);
     } else if (levelCust == 2) {
+      setProductName(valueproduct.name)
       setPrice(valueproduct.SellingPrice[0].price2);
     } else if (levelCust == 3) {
+      setProductName(valueproduct.name)
       setPrice(valueproduct.SellingPrice[0].price3);
     } else if (levelCust == 4) {
+      setProductName(valueproduct.name)
       setPrice(valueproduct.SellingPrice[0].price4);
     } else if (levelCust == 5) {
+      setProductName(valueproduct.name)
       setPrice(valueproduct.SellingPrice[0].price5);
     } else {
+      setProductName(valueproduct.name)
       setPrice(valueproduct.SellingPrice[0].price0);
     }
   };
@@ -244,7 +255,7 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Product Name
               </label>
-              <input type="number" hidden name="product_id" value={productID} />
+              <input type="number" hidden  name="product_id" value={productID} />
               <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value={productName} readOnly />
             </div>
             <div className="mb-4 mt-5">
