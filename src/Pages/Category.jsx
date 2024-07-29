@@ -22,12 +22,12 @@ const Category = () => {
   }, []);
 
   const deleteData = async (id) => {
-    const check = confirm("Anda yakin ingin menghapus data ini ? ");
+    const check = confirm("Are you sure you want to delete this data ?");
     if (check == true) {
       try {
         await axios.delete(`http://localhost:4000/categories/${id}`);
         setCategory(category.filter((item) => item.id !== id));
-        alert("Data berhasil dihapus");
+        alert("Data has been successfully deleted");
         window.location.reload();
       } catch (error) {
         console.log("error", error);
