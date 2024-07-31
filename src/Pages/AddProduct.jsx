@@ -197,7 +197,7 @@ const AddProduct = () => {
             </div>
           </div>
         </div>
-
+        {notification && <div className="mt-10 text-red-500">{notification}</div>}
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
           Save
         </button>
