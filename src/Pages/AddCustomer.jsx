@@ -8,6 +8,8 @@ const AddCustomer = () => {
   const [level, setLevel] = useState([]);
   const [selectedOption, setSelectedOption] = useState(0);
   const [statuscustomer, setStatusCustomer] = useState("");
+  const [error, setError] = useState({});
+  const [notification, setNotification] = useState("");
 
   const url = "http://localhost:4000/customers";
   const navigate = useNavigate();
@@ -42,6 +44,19 @@ const AddCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // const newErrors = {};
+    // Object.keys(data).forEach((key) => {
+    //   if (!data[key]) {
+    //     newErrors[key] = "This field is required";
+    //   }
+    // });
+
+    // if (Object.keys(newErrors).length > 0) {
+    //   setError(newErrors);
+    //   setNotification("Error: Data incomplete!");
+    //   return;
+    // }
+
     const userData = {
       name: data.name,
       address: data.address,
@@ -55,8 +70,22 @@ const AddCustomer = () => {
       alert("Data Berhasil ditambahkan !");
       navigate("/customers");
     } catch (error) {
+      // if (error.response && error.response.status === 400) {
+      //   const errorMessage = error.response.data.message;
+      //   if (errorMessage === "The telephone number is registered") {
+      //     alert("The telephone number is registered");
+      //   } else {
+      //     setNotification(error.response.data.message);
+      //   }
+      // } else {
+      //   setNotification("An error occurred on the server");
+      // }
       console.log(error);
     }
+  };
+
+  const getFieldClassName = (field) => {
+    return error[field] ? "input-error" : "";
   };
 
   return (
@@ -77,7 +106,7 @@ const AddCustomer = () => {
                 Customer Name
               </label>
               <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("name") ? "border-red-500" : ""}`}
                 id="name"
                 type="text"
                 name="name"
@@ -85,19 +114,27 @@ const AddCustomer = () => {
                 onChange={handleChange}
                 placeholder="Input customer name"
               />
+              {error.name && <div className="error text-red-500 font-thin text-sm">{error.name}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="address">
                 Address
               </label>
-              <textarea name="address" value={data.address} onChange={handleChange} placeholder="Input address" className="shadow border rounded w-5/6 py-10 px-3 text-gray-700 focus:outline-none focus:shadow-outline"></textarea>
+              <textarea
+                name="address"
+                value={data.address}
+                onChange={handleChange}
+                placeholder="Input address"
+                className={`shadow border rounded w-5/6 py-10 px-3 text-gray-700 focus:outline-none focus:shadow-outline ${getFieldClassName("address") ? "border-red-500" : ""}`}
+              ></textarea>
+              {error.address && <div className="error text-red-500 font-thin text-sm">{error.address}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="telp">
                 Telp
               </label>
               <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("telp") ? "border-red-500" : ""}`}
                 id="telp"
                 type="text"
                 name="telp"
@@ -105,6 +142,7 @@ const AddCustomer = () => {
                 onChange={handleChange}
                 placeholder="Input customer telp"
               />
+              {error.telp && <div className="error text-red-500 font-thin text-sm">{error.telp}</div>}
             </div>
           </div>
           <div className="flex-1 flex-col">
@@ -112,7 +150,7 @@ const AddCustomer = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="level_id">
                 Customer Level
               </label>
-              <select className="form-select px-10 py-2 border w-5/6 rounded-lg" name="level_id" value={selectedOption} onChange={handleSelectChange}>
+              <select className={`form-select px-10 py-2 border w-5/6 rounded-lg `} name="level_id" value={selectedOption} onChange={handleSelectChange}>
                 <option className="text-center md:text-base text-xs" value="">
                   Choose
                 </option>
@@ -122,13 +160,14 @@ const AddCustomer = () => {
                   </option>
                 ))}
               </select>
+              {/* {error.level_id && <div className="error text-red-500 font-thin text-sm">{error.level_id}</div>} */}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="status">
                 Customer Status
               </label>
               <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
                 id="status"
                 type="text"
                 name="status"
@@ -136,10 +175,11 @@ const AddCustomer = () => {
                 readOnly
                 placeholder="Input customer status"
               />
+              {/* {error.status && <div className="error text-red-500 font-thin text-sm">{error.status}</div>} */}
             </div>
           </div>
         </div>
-
+        {notification && <div className="mt-10 text-red-500">{notification}</div>}
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
           Save
         </button>
