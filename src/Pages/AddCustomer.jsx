@@ -6,10 +6,11 @@ import axios from "axios";
 const AddCustomer = () => {
   const [data, setData] = useState({ name: "", address: "", telp: "", level_id: "", status: "" });
   const [level, setLevel] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [selectedOption, setSelectedOption] = useState("");
   const [statuscustomer, setStatusCustomer] = useState("");
   const [error, setError] = useState({});
   const [notification, setNotification] = useState("");
+  const [telpError, setTelpError] = useState(false);
 
   const url = "http://localhost:4000/customers";
   const navigate = useNavigate();
@@ -44,25 +45,32 @@ const AddCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const newErrors = {};
-    // Object.keys(data).forEach((key) => {
-    //   if (!data[key]) {
-    //     newErrors[key] = "This field is required";
-    //   }
-    // });
+    const newErrors = {};
 
-    // if (Object.keys(newErrors).length > 0) {
-    //   setError(newErrors);
-    //   setNotification("Error: Data incomplete!");
-    //   return;
-    // }
-
-    const userData = {
-      name: data.name,
-      address: data.address,
-      telp: data.telp,
+    const formData = {
+      ...data,
       level_id: selectedOption,
       status: statuscustomer,
+    };
+
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key]) {
+        newErrors[key] = "This field is required";
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      setNotification("Error: Data incomplete!");
+      return;
+    }
+
+    const userData = {
+      name: formData.name,
+      address: formData.address,
+      telp: formData.telp,
+      level_id: formData.level_id,
+      status: formData.status,
     };
     try {
       const response = await axios.post(url, userData);
@@ -70,22 +78,25 @@ const AddCustomer = () => {
       alert("Data Berhasil ditambahkan !");
       navigate("/customers");
     } catch (error) {
-      // if (error.response && error.response.status === 400) {
-      //   const errorMessage = error.response.data.message;
-      //   if (errorMessage === "The telephone number is registered") {
-      //     alert("The telephone number is registered");
-      //   } else {
-      //     setNotification(error.response.data.message);
-      //   }
-      // } else {
-      //   setNotification("An error occurred on the server");
-      // }
+      if (error.response && error.response.status === 400) {
+        setNotification(error.response.data.message);
+        if (error.response.data.message === "The telephone number is registered") {
+          setTelpError(true);
+        }
+      } else {
+        setNotification("An error occurred on the server");
+      }
       console.log(error);
     }
   };
 
   const getFieldClassName = (field) => {
     return error[field] ? "input-error" : "";
+  };
+
+  // Style untuk input telp yang error
+  const errorStyle = {
+    borderColor: "red",
   };
 
   return (
@@ -98,7 +109,7 @@ const AddCustomer = () => {
           </button>
         </Link>
       </div>
-      <form className="w-full mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit} action="">
+      <form className="w-full mx-auto p-6 rounded shadow-md" onSubmit={handleSubmit}>
         <div className="flex justify-between">
           <div className="flex-1 flex-col">
             <div className="mb-4 mt-5">
@@ -140,6 +151,7 @@ const AddCustomer = () => {
                 name="telp"
                 value={data.telp}
                 onChange={handleChange}
+                style={telpError ? errorStyle : {}}
                 placeholder="Input customer telp"
               />
               {error.telp && <div className="error text-red-500 font-thin text-sm">{error.telp}</div>}
@@ -150,7 +162,7 @@ const AddCustomer = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="level_id">
                 Customer Level
               </label>
-              <select className={`form-select px-10 py-2 border w-5/6 rounded-lg `} name="level_id" value={selectedOption} onChange={handleSelectChange}>
+              <select className={`form-select px-10 py-2 border w-5/6 rounded-lg ${getFieldClassName("level_id") ? "border-red-500" : ""}`} name="level_id" value={selectedOption} onChange={handleSelectChange}>
                 <option className="text-center md:text-base text-xs" value="">
                   Choose
                 </option>
@@ -160,14 +172,14 @@ const AddCustomer = () => {
                   </option>
                 ))}
               </select>
-              {/* {error.level_id && <div className="error text-red-500 font-thin text-sm">{error.level_id}</div>} */}
+              {error.level_id && <div className="error text-red-500 font-thin text-sm">{error.level_id}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="status">
                 Customer Status
               </label>
               <input
-                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("status") ? "border-red-500" : ""}`}
                 id="status"
                 type="text"
                 name="status"
@@ -175,7 +187,7 @@ const AddCustomer = () => {
                 readOnly
                 placeholder="Input customer status"
               />
-              {/* {error.status && <div className="error text-red-500 font-thin text-sm">{error.status}</div>} */}
+              {error.status && <div className="error text-red-500 font-thin text-sm">{error.status}</div>}
             </div>
           </div>
         </div>
