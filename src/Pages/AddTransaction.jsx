@@ -12,11 +12,14 @@ const AddTransaction = () => {
   const [customerID, setCustomerID] = useState();
   const [customerName, setCustomerName] = useState();
   const [levelCust, setLevelCust] = useState();
+  const [productID, setproductID] = useState();
   const [selectedProduct, setSelectedProduct] = useState();
   const [price, setPrice] = useState();
   const [total, setTotal] = useState();
   const [showModal, setShowModal] = useState(false);
   const [showModalCustomer, setShowModalCustomer] = useState(false);
+  const [error, setError] = useState({});
+  const [notification, setNotification] = useState("");
 
   const url = "http://localhost:4000/transactions";
   const navigate = useNavigate();
@@ -56,6 +59,7 @@ const AddTransaction = () => {
 
   const handleProductSelect = (itemproduct) => {
     setSelectedProduct(itemproduct);
+    setproductID(itemproduct.id);
     const valueproduct = product.find((item) => item.id == itemproduct.id);
     if (levelCust == 1) {
       setPrice(valueproduct.SellingPrice[0].price1);
@@ -78,23 +82,55 @@ const AddTransaction = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = {
-      product_id: selectedProduct.id,
+    const newErrors = {};
+
+    const formData = {
+      ...data,
+      product_id: productID,
       customer_id: customerID,
-      tanggal: new Date(data.tanggal),
       total: +total,
-      jumlah_beli: +data.jumlah_beli,
       price_per_piece: +price,
       subtotal: +total,
+    };
+
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key]) {
+        newErrors[key] = "This field is required";
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      setNotification("Error: Data incomplete!");
+      return;
+    }
+
+    const userData = {
+      product_id: formData.product_id,
+      customer_id: formData.customer_id,
+      tanggal: new Date(data.tanggal),
+      total: formData.total,
+      jumlah_beli: +data.jumlah_beli,
+      price_per_piece: formData.price_per_piece,
+      subtotal: formData.subtotal,
     };
     try {
       const response = await axios.post(url, userData);
       console.log(response);
-      alert("Data Berhasil ditambahkan !");
+      alert("Successfully added Data !");
       navigate("/transactions");
     } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setNotification(error.response.data.message);
+      } else {
+        setNotification("An error occurred on the server");
+      }
       console.log(error);
     }
+  };
+
+  const getFieldClassName = (field) => {
+    return error[field] ? "input-error" : "";
   };
 
   return (
@@ -123,8 +159,8 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
                 Choose Customer
               </label>
-              <button onClick={() => setShowModalCustomer(true)} className="bg-blue-500 text-white p-2 rounded-lg" disabled={!isReseller}>
-                <FaUsers/>
+              <button type="button" onClick={() => setShowModalCustomer(true)} className="bg-blue-500 text-white p-2 rounded-lg" disabled={!isReseller}>
+                <FaUsers />
               </button>
               <ModalCustomer showModalCustomer={showModalCustomer} setShowModalCustomer={setShowModalCustomer} onCustomerSelect={handleCustomerSelect} />
             </div>
@@ -134,26 +170,35 @@ const AddTransaction = () => {
               </label>
               <input type="number" hidden className="border" name="customer_id" value={customerID} />
               <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""}`}
                 id="price_per_piece"
                 type="text"
                 name="price_per_piece"
                 value={customerName}
                 readOnly
               />
+              {error.customer_id && <div className="error text-red-500 font-thin text-sm">{error.customer_id}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Customer Level
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="customer_level" type="number" name="customer_level" value={levelCust} readOnly />
+              <input
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""}`}
+                id="customer_level"
+                type="number"
+                name="customer_level"
+                value={levelCust}
+                readOnly
+              />
+              {error.customer_id && <div className="error text-red-500 font-thin text-sm">{error.customer_id}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
                 Choose Product
               </label>
-              <button onClick={() => setShowModal(true)} className="bg-blue-500 text-white p-2 rounded-lg">
-                <FaBox/>
+              <button type="button" onClick={() => setShowModal(true)} className="bg-blue-500 text-white p-2 rounded-lg">
+                <FaBox />
               </button>
               <Modal showModal={showModal} setShowModal={setShowModal} onProductSelect={handleProductSelect} />
             </div>
@@ -165,19 +210,28 @@ const AddTransaction = () => {
               </label>
               <input type="number" hidden name="product_id" value={selectedProduct ? selectedProduct.id : ""} />
               <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="price_per_piece"
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("product_id") ? "border-red-500" : ""}`}
+                id="product_name"
                 type="text"
-                name="price_per_piece"
+                name="product_name"
                 value={selectedProduct ? selectedProduct.name : ""}
                 readOnly
               />
+              {error.product_id && <div className="error text-red-500 font-thin text-sm">{error.product_id}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Price
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price_per_piece" type="number" name="price_per_piece" value={price} readOnly />
+              <input
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("price_per_piece") ? "border-red-500" : ""}`}
+                id="price_per_piece"
+                type="number"
+                name="price_per_piece"
+                value={price}
+                readOnly
+              />
+              {error.price_per_piece && <div className="error text-red-500 font-thin text-sm">{error.price_per_piece}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="amount">
@@ -185,7 +239,7 @@ const AddTransaction = () => {
               </label>
               <div className="flex">
                 <input
-                  className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("jumlah_beli") ? "border-red-500" : ""}`}
                   id="jumlah_beli"
                   type="number"
                   name="jumlah_beli"
@@ -193,7 +247,8 @@ const AddTransaction = () => {
                   onChange={handleChange}
                   placeholder="Input Purchase Amount"
                 />
-                <button className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
+                <div className="flex flex-col ml-5">{error.price_per_piece && <div className="error text-red-500 font-thin text-sm">{error.price_per_piece}</div>}</div>
+                <button type="button" className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
                   <FaCalculator />
                 </button>
               </div>
@@ -202,24 +257,33 @@ const AddTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
                 Total
               </label>
-              <input className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="total" type="number" name="total" value={total} readOnly />
+              <input
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("total") ? "border-red-500" : ""}`}
+                id="total"
+                type="number"
+                name="total"
+                value={total}
+                readOnly
+              />
+              {error.total && <div className="error text-red-500 font-thin text-sm">{error.total}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
                 Transaction Date
               </label>
               <input
-                className="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("tanggal") ? "border-red-500" : ""}`}
                 id="total"
                 type="datetime-local"
                 name="tanggal"
                 value={data.tanggal}
                 onChange={handleChange}
               />
+              {error.tanggal && <div className="error text-red-500 font-thin text-sm">{error.tanggal}</div>}
             </div>
           </div>
         </div>
-
+        {notification && <div className="mt-10 text-red-500">{notification}</div>}
         <button type="submit" className="px-10 py-2 border bg-blue-600 text-white hover:bg-blue-500 rounded mt-10 focus:outline-none focus:shadow-outline">
           Save
         </button>
