@@ -20,6 +20,7 @@ const AddTransaction = () => {
   const [showModalCustomer, setShowModalCustomer] = useState(false);
   const [error, setError] = useState({});
   const [notification, setNotification] = useState("");
+  const [stock, setStock] = useState(false);
 
   const url = "http://localhost:4000/transactions";
   const navigate = useNavigate();
@@ -122,6 +123,9 @@ const AddTransaction = () => {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setNotification(error.response.data.message);
+        if (error.response.data.message === "Insufficient product stock") {
+          setStock(true);
+        }
       } else {
         setNotification("An error occurred on the server");
       }
@@ -131,6 +135,11 @@ const AddTransaction = () => {
 
   const getFieldClassName = (field) => {
     return error[field] ? "input-error" : "";
+  };
+
+  // Style untuk input telp yang error
+  const errorStyle = {
+    borderColor: "red",
   };
 
   return (
@@ -246,6 +255,7 @@ const AddTransaction = () => {
                   value={data.jumlah_beli}
                   onChange={handleChange}
                   placeholder="Input Purchase Amount"
+                  style={stock ? errorStyle : {}}
                 />
                 <div className="flex flex-col ml-5">{error.price_per_piece && <div className="error text-red-500 font-thin text-sm">{error.price_per_piece}</div>}</div>
                 <button type="button" className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
