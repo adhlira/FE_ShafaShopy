@@ -9,20 +9,20 @@ import ModalCustomer from "./ModalCustomer.jsx";
 const EditTransaction = () => {
   const [product, setProduct] = useState([]);
   const [isReseller, setIsReseller] = useState(false);
-  const [customerID, setCustomerID] = useState();
-  const [customerName, setCustomerName] = useState();
+  const [customerID, setCustomerID] = useState("");
+  const [customerName, setCustomerName] = useState("");
   const [levelCust, setLevelCust] = useState();
   const [customerType, setCustomerType] = useState("");
   const [productName, setProductName] = useState();
-  const [productID, setProductID] = useState();
-  const [price, setPrice] = useState();
-  const [total, setTotal] = useState();
+  const [productID, setProductID] = useState("");
+  const [price, setPrice] = useState(0);
+  const [total, setTotal] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showModalCustomer, setShowModalCustomer] = useState(false);
-  const [transactions, setTransactions] = useState({});
-  const [jumlah_beli, setJumlahBeli] = useState();
-  const [notification, setNotification] = useState();
-  const [error, setError] = useState();
+  const [transactions, setTransactions] = useState({ product_id: "", customer_id: "", total: "", jumlah_beli: "", price_per_piece: "", subtotal: "", tanggal: "" });
+  const [jumlah_beli, setJumlahBeli] = useState(0);
+  const [notification, setNotification] = useState("");
+  const [error, setError] = useState({});
   const { id } = useParams();
 
   const url = `http://localhost:4000/transactions/${id}`;
@@ -69,6 +69,8 @@ const EditTransaction = () => {
       setTotal("");
       setIsReseller(false);
     } else {
+      setCustomerID("");
+      setProductID("");
       setCustomerName("");
       setLevelCust("");
       setProductName("");
@@ -168,8 +170,8 @@ const EditTransaction = () => {
 
     const formData = {
       ...transactions,
-      product_id: productID,
-      customer_id: customerID,
+      product_id: +productID,
+      customer_id: +customerID,
       total: +total,
       jumlah_beli: +jumlah_beli,
       price_per_piece: +price,
@@ -269,7 +271,7 @@ const EditTransaction = () => {
                 Customer Level
               </label>
               <input
-                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_level") ? "border-red-500" : ""}`}
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""}`}
                 id="customer_level"
                 type="number"
                 name="customer_level"
@@ -277,7 +279,7 @@ const EditTransaction = () => {
                 onChange={(e) => setLevelCust(e.target.value)}
                 readOnly
               />
-              {error.customer_level && <div className="error text-red-500 font-thin text-sm">{error.customer_level}</div>}
+              {error.customer_id && <div className="error text-red-500 font-thin text-sm">{error.customer_id}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
@@ -295,14 +297,28 @@ const EditTransaction = () => {
                 Product Name
               </label>
               <input type="number" hidden name="product_id" value={productID} />
-              <input className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("product_id") ? "border-red-500" : ""}`} id="product_name" type="text" name="product_name" value={productName} readOnly />
+              <input
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("product_id") ? "border-red-500" : ""}`}
+                id="product_name"
+                type="text"
+                name="product_name"
+                value={productName}
+                readOnly
+              />
               {error.product_id && <div className="error text-red-500 font-thin text-sm">{error.product_id}</div>}
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="price">
                 Price
               </label>
-              <input className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("price_per_piece") ? "border-red-500" : ""}`} id="price_per_piece" type="number" name="price_per_piece" value={price} readOnly />
+              <input
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("price_per_piece") ? "border-red-500" : ""}`}
+                id="price_per_piece"
+                type="number"
+                name="price_per_piece"
+                value={price}
+                readOnly
+              />
               {error.price_per_piece && <div className="error text-red-500 font-thin text-sm">{error.price_per_piece}</div>}
             </div>
             <div className="mb-4 mt-5">
@@ -321,7 +337,6 @@ const EditTransaction = () => {
                     onChange={(e) => detailChange(index, e)}
                     placeholder="Input Purchase Amount"
                   />
-                  
                 ))}
                 {error.jumlah_beli && <div className="error text-red-500 font-thin text-sm">{error.jumlah_beli}</div>}
                 <button type="button" className="border bg-blue-500 hover:bg-blue-400 text-white rounded-lg p-2 ml-2" onClick={calculateTotal}>
@@ -333,7 +348,14 @@ const EditTransaction = () => {
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="total">
                 Total
               </label>
-              <input className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("total") ? "border-red-500" : ""}`} id="total" type="number" name="total" value={total} readOnly />
+              <input
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("total") ? "border-red-500" : ""}`}
+                id="total"
+                type="number"
+                name="total"
+                value={total}
+                readOnly
+              />
               {error.total && <div className="error text-red-500 font-thin text-sm">{error.total}</div>}
             </div>
             <div className="mb-4 mt-5">
