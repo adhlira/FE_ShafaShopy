@@ -23,6 +23,7 @@ const EditTransaction = () => {
   const [jumlah_beli, setJumlahBeli] = useState(0);
   const [notification, setNotification] = useState("");
   const [error, setError] = useState({});
+  const [stockError, setStockError] = useState(false);
   const { id } = useParams();
 
   const url = `http://localhost:4000/transactions/${id}`;
@@ -208,6 +209,9 @@ const EditTransaction = () => {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setNotification(error.response.data.message);
+        if (error.response.data.message === "Insufficient product stock") {
+          setStockError(true);
+        }
       } else {
         setNotification("An error occurred on the server");
       }
@@ -217,6 +221,10 @@ const EditTransaction = () => {
 
   const getFieldClassName = (field) => {
     return error[field] ? "input-error" : "";
+  };
+
+  const errorStyle = {
+    borderColor: "red",
   };
 
   return (
@@ -256,7 +264,7 @@ const EditTransaction = () => {
               </label>
               <input type="number" hidden className="border" name="customer_id" value={customerID} />
               <input
-                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""}`}
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""} cursor-not-allowed`}
                 id="price_per_piece"
                 type="text"
                 name="price_per_piece"
@@ -271,7 +279,7 @@ const EditTransaction = () => {
                 Customer Level
               </label>
               <input
-                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""}`}
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("customer_id") ? "border-red-500" : ""} cursor-not-allowed`}
                 id="customer_level"
                 type="number"
                 name="customer_level"
@@ -312,7 +320,7 @@ const EditTransaction = () => {
                 Price
               </label>
               <input
-                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("price_per_piece") ? "border-red-500" : ""}`}
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("price_per_piece") ? "border-red-500" : ""} cursor-not-allowed`}
                 id="price_per_piece"
                 type="number"
                 name="price_per_piece"
@@ -336,6 +344,7 @@ const EditTransaction = () => {
                     value={jumlah_beli}
                     onChange={(e) => detailChange(index, e)}
                     placeholder="Input Purchase Amount"
+                    style={stockError ? errorStyle : {}}
                   />
                 ))}
                 {error.jumlah_beli && <div className="error text-red-500 font-thin text-sm">{error.jumlah_beli}</div>}
@@ -349,7 +358,7 @@ const EditTransaction = () => {
                 Total
               </label>
               <input
-                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("total") ? "border-red-500" : ""}`}
+                className={`shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${getFieldClassName("total") ? "border-red-500" : ""} cursor-not-allowed`}
                 id="total"
                 type="number"
                 name="total"
