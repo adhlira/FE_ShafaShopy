@@ -63,6 +63,7 @@ const EditTransaction = () => {
     if (selectedType === "Non Reseller") {
       setCustomerName("Non Reseller");
       setCustomerID(1);
+      setProductID("");
       setLevelCust(0);
       setProductName("");
       setPrice("");
