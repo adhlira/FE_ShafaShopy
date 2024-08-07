@@ -5,14 +5,14 @@ import Sidebar from "./Components/Sidebar.jsx";
 
 const links = [
   { name: "Dashboard", path: "/" },
-  { name: "Categories", path: "/categories" },
-  { name: "Colors", path: "/colors" },
-  { name: "Products", path: "/products" },
-  { name: "Selling Prices", path: "/sellingprices" },
-  { name: "Customers", path: "/customers" },
-  { name: "Transactions", path: "/transactions" },
-  { name: "Monthly Report", path: "/monthlyreport" },
-  { name: "Reseller Report", path: "/resellerreport" },
+  { name: "Categories", path: "categories" },
+  { name: "Colors", path: "colors" },
+  { name: "Products", path: "products" },
+  { name: "Selling Prices", path: "sellingprices" },
+  { name: "Customers", path: "customers" },
+  { name: "Transactions", path: "transactions" },
+  { name: "Monthly Report", path: "monthlyreport" },
+  { name: "Reseller Report", path: "resellerreport" },
 ];
 
 function App() {
