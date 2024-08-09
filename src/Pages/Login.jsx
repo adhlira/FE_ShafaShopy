@@ -1,9 +1,40 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:4000/login", {
+        username,
+        password,
+      });
+      console.log(response);
+
+      if (response.status === 200) {
+        // Simpan data user di localStorage
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        alert("Succesfully Login!");
+        navigate("/dashboard");
+      } else {
+        setMessage("Login failed: " + response.data.message);
+      }
+    } catch (error) {
+      setMessage("Error: " + error.response?.data?.message || "There is An error");
+    }
   };
 
   return (
@@ -15,12 +46,20 @@ const Login = () => {
         <div className="w-full mt-14">
           <h1 className="text-center font-bold text-2xl">Sign In</h1>
           <h2 className="text-center text-xl mt-2">Welcome to Shafashopy</h2>
-          <form action="" className="p-6">
+          <form onSubmit={handleSubmit} className="p-6">
             <div className="mb-4 mt-5">
-              <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="email">
-                Email
+              <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="username">
+                Username
               </label>
-              <input className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="email" type="text" name="email" placeholder="Input email" />
+              <input
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                id="username"
+                type="text"
+                name="username"
+                placeholder="Input username"
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-4 mt-5">
               <label className="block text-gray-700 md:text-sm text-base font-bold mb-2" htmlFor="name">
@@ -33,6 +72,8 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Input password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
                 <button type="button" onClick={togglePasswordVisibility} className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 focus:outline-none">
                   {showPassword ? (
@@ -49,13 +90,14 @@ const Login = () => {
                 </button>
               </div>
             </div>
-            <button type="button" className="w-full bg-blue-500 text-white p-2 rounded-lg">
+            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded-lg">
               Sign In
             </button>
             <button type="button" className="w-full p-2 border rounded-lg mt-2">
               Create An Account
             </button>
           </form>
+          {message && <p className="text-red-500">{message}</p>}
         </div>
       </div>
     </div>
