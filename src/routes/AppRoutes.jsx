@@ -29,12 +29,12 @@ import Login from "../Pages/Login.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
-  {path:"/", element:<Login/>},
+  { path: "/login", element: <Login /> },
   {
-    path: "/dashboard",
+    path: "/",
     element: <App />,
     children: [
-      { path: "/dashboard", element: <Dashboard /> },
+      { path: "dashboard", element: <Dashboard /> },
       { path: "categories", element: <Category /> },
       { path: "categories/add", element: <AddCategory /> },
       { path: "categories/edit/:id", element: <EditCategory /> },

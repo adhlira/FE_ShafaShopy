@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Components/Sidebar.jsx";
 
 const links = [
-  { name: "Dashboard", path: "/" },
+  { name: "Dashboard", path: "dashboard" },
   { name: "Categories", path: "categories" },
   { name: "Colors", path: "colors" },
   { name: "Products", path: "products" },
