@@ -29,9 +29,9 @@ import Login from "../Pages/Login.jsx";
 import App from "../App.jsx";
 
 const router = createBrowserRouter([
-  { path: "/login", element: <Login /> },
+  { path: "/", element: <Login /> },
   {
-    path: "/",
+    path: "/app",
     element: <App />,
     children: [
       { path: "dashboard", element: <Dashboard /> },

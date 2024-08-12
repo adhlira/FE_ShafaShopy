@@ -39,7 +39,7 @@ const Category = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Categories</h1>
-        <Link to={"/categories/add"}>
+        <Link to={"/app/categories/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">
             <FaPlus />
           </button>
@@ -59,7 +59,7 @@ const Category = () => {
               <td className="border">{index + 1}</td>
               <td className="border">{item.name}</td>
               <td className="border">
-                <Link to={`/categories/edit/${item.id}`}>
+                <Link to={`/app/categories/edit/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white">
                     <FaPenToSquare />
                   </button>

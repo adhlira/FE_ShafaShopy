@@ -28,7 +28,7 @@ const Login = () => {
         // Simpan data user di localStorage
         localStorage.setItem("user", JSON.stringify(response.data.user));
         alert("Succesfully Login!");
-        navigate("/dashboard");
+        navigate("/app/dashboard");
       } else {
         setMessage("Login failed: " + response.data.message);
       }
