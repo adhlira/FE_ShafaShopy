@@ -39,7 +39,7 @@ const Colors = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Data Colors</h1>
-        <Link to={"/colors/add"}>
+        <Link to={"/app/colors/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaPlus/></button>
         </Link>
       </div>
@@ -57,7 +57,7 @@ const Colors = () => {
               <td className="border">{index + 1}</td>
               <td className="border">{item.name}</td>
               <td className="border">
-                <Link to={`/colors/edit/${item.id}`}>
+                <Link to={`/app/colors/edit/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white"><FaPenToSquare/></button>
                 </Link>
                 <Link>

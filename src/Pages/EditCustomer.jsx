@@ -111,7 +111,7 @@ const EditCustomer = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Edit Customer</h1>
-        <Link to={"/customers"}>
+        <Link to={"/app/customers"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">
             <FaArrowLeft />
           </button>

@@ -73,7 +73,7 @@ const Customer = () => {
           onChange={handleSearch}
           placeholder="Search by customer name . . ."
         />
-        <Link to={"/customers/add"}>
+        <Link to={"/app/customers/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaPlus/></button>
         </Link>
       </div>
@@ -99,7 +99,7 @@ const Customer = () => {
               <td className="border">{item.status}</td>
               <td className="border">{item.Level?.level}</td>
               <td className="border">
-                <Link to={`/customers/edit/${item.id}`}>
+                <Link to={`/app/customers/edit/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white"><FaPenToSquare/></button>
                 </Link>
                 <Link>
