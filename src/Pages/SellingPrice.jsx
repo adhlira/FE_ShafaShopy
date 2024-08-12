@@ -82,7 +82,7 @@ const Products = () => {
           onChange={handleSearch}
           placeholder="Search by product name . . ."
         />
-        <Link to={"/sellingprice/add"}>
+        <Link to={"/app/sellingPrices/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaPlus/></button>
         </Link>
       </div>
@@ -114,7 +114,7 @@ const Products = () => {
               <td className="border">{formatRupiah(item.price4)}</td>
               <td className="border">{formatRupiah(item.price5)}</td>              
               <td className="border">
-                <Link to={`/sellingprice/edit/${item.id}`}>
+                <Link to={`/app/sellingPrices/edit/${item.id}`}>
                   <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white"><FaPenToSquare/></button>
                 </Link>
                 <Link>

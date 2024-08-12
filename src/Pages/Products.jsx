@@ -74,7 +74,7 @@ const Products = () => {
           onChange={handleSearch}
           placeholder="Search product by product name . . ."
         />
-        <Link to={"/products/add"}>
+        <Link to={"/app/products/add"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaPlus/></button>
         </Link>
       </div>
@@ -96,10 +96,10 @@ const Products = () => {
               <td className="border">{item.Color?.name}</td>
               <td className="border">{item.stock}</td>
               <td className="border">
-                <Link to={`/products/${item.id}`}>
+                <Link to={`/app/products/${item.id}`}>
                   <button className="border p-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white"><FaInfo/></button>
                 </Link>
-                <Link to={`/products/edit/${item.id}`}>
+                <Link to={`/app/products/edit/${item.id}`}>
                   <button className="border p-2 ml-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-white"><FaPenToSquare/></button>
                 </Link>
                 <Link>

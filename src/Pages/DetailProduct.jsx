@@ -34,7 +34,7 @@ const DetailProduct = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Detail Product</h1>
-        <Link to={"/products"}>
+        <Link to={"/app/products"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaArrowLeft/></button>
         </Link>
       </div>

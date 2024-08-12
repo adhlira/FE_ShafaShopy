@@ -79,7 +79,7 @@ const AddSellingPrice = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Edit Selling Price</h1>
-        <Link to={"/sellingPrices"}>
+        <Link to={"/app/sellingPrices"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">
             <FaArrowLeft />
           </button>

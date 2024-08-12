@@ -232,7 +232,7 @@ const EditTransaction = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Edit Transaction</h1>
-        <Link to={"/transactions"}>
+        <Link to={"/app/transactions"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white">
             <FaArrowLeft />
           </button>

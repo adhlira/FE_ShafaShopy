@@ -33,7 +33,7 @@ const DetailTransaction = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-2xl">Detail Data Transactions</h1>
-        <Link to={"/transactions"}>
+        <Link to={"/app/transactions"}>
           <button className="border rounded-lg p-2 bg-green-800 hover:bg-green-700 text-white"><FaArrowLeft/></button>
         </Link>
       </div>
