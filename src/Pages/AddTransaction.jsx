@@ -119,7 +119,7 @@ const AddTransaction = () => {
       const response = await axios.post(url, userData);
       console.log(response);
       alert("Successfully added Data !");
-      navigate("/transactions");
+      navigate("/app/transactions");
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setNotification(error.response.data.message);
